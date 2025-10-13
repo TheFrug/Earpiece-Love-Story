@@ -1,0 +1,8 @@
+﻿title: Start
+---
+MC: (sighs) Big night tonight...
+Roommate: Relax, man. Just trust the earpiece.
+MC: This feels unethical.
+Roommate: Ethics are for losers who don’t get second dates. 
+<<add_confidence GameManager 5>>
+=== 
