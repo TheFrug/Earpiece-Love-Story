@@ -12,6 +12,16 @@ public class GameManager : MonoBehaviour
 
     public int confidence = 0;
     public int honesty = 0;
+    public int bodyCount = 9;
+    public enum frame{
+		
+		FirstSample,
+		SecondSample,
+		ThirdSample,
+		
+	}
+
+    public frame frameStatus;
 
     private void Awake()
     {
