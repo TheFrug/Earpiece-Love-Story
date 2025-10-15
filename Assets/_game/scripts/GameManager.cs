@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     // --- Core Game Variables ---
     [Header("Core Stats")]
     public int confidence = 0;
+<<<<<<< HEAD
     public int dateScore = 0;
     public bool betaBehaviorDetected = false;
 
@@ -54,6 +55,19 @@ public class GameManager : MonoBehaviour
     public float visorSlideDuration = 1.2f;
     public float visorSlideDelay = 0.2f;
 
+=======
+    public int honesty = 0;
+    public int bodyCount = 9;
+    public enum frame{
+		
+		FirstSample,
+		SecondSample,
+		ThirdSample,
+		
+	}
+
+    public frame frameStatus;
+>>>>>>> origin/main
 
     private void Awake()
     {
