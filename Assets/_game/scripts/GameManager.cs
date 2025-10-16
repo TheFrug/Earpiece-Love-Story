@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Yarn.Unity;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -46,6 +47,14 @@ public class GameManager : MonoBehaviour
     public float visorSlideDuration = 1.2f;
     public float visorSlideDelay = 0.2f;
 
+    [Header("Date Portrait Animation")]
+    [SerializeField] private Image datePortrait;
+    [SerializeField] private float dateFadeDuration = 1.5f; // seconds
+
+    [Header("Fade to Black")]
+    [SerializeField] private Image fadeOverlay;
+    [SerializeField] private float fadeDuration = 1.5f;
+
     // --- Score Color Thresholds ---
     [Header("Score Colors (Low → High)")]
     public Color scoreColor0to59 = new Color(0.8f, 0.2f, 0.2f);   // red
@@ -81,10 +90,65 @@ public class GameManager : MonoBehaviour
         if (feedbackPanelCanvasGroup != null) feedbackPanelCanvasGroup.alpha = 0;
     }
 
+    private void Update()
+    {
+        // ENTER → reload the scene
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ReloadScene();
+        }
+
+        // ESC → quit the application
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            QuitGame();
+        }
+    }
+
+    private void ReloadScene()
+    {
+        StartCoroutine(ReloadAfterDelay(0.5f));
+    }
+
+    private IEnumerator ReloadAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // Stop all Yarn coroutines safely
+        var runner = FindObjectOfType<Yarn.Unity.DialogueRunner>();
+        if (runner != null)
+            runner.Stop();
+
+        // Reload
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.buildIndex);
+    }
+
+    private void QuitGame()
+    {
+    #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false; // stop playmode if testing
+    #else
+            Application.Quit(); // close the built app
+    #endif
+    }
+
     [YarnCommand("RunStartupFlicker")]
     public void RunStartupFlicker()
     {
         StartCoroutine(StartupFlicker());
+    }
+
+    [YarnCommand("dateEnters")]
+    public void DateEnters()
+    {
+        StartCoroutine(FadeInDatePortrait());
+    }
+
+    [YarnCommand("fadeToBlack")]
+    public void FadeToBlack()
+    {
+        StartCoroutine(FadeScreenToBlack());
     }
 
     // --- UI Update Methods ---
@@ -161,6 +225,7 @@ public class GameManager : MonoBehaviour
         if (score < 90) return scoreColor80to89;
         return scoreColor90to100;
     }
+
 
     // --- Yarn command for feedback (Slide In) ---
     [YarnCommand("set_feedback")]
@@ -258,6 +323,33 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(FlickerPanel(feedbackPanelCanvasGroup));
     }
 
+    private IEnumerator FadeInDatePortrait()
+    {
+        if (datePortrait == null)
+        {
+            Debug.LogWarning("Date portrait not assigned!");
+            yield break;
+        }
+
+        // Ensure it's visible and reset transparency
+        Color c = datePortrait.color;
+        c.a = 0f;
+        datePortrait.color = c;
+        datePortrait.gameObject.SetActive(true);
+
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime / dateFadeDuration;
+            c.a = Mathf.SmoothStep(0f, 1f, t);
+            datePortrait.color = c;
+            yield return null;
+        }
+
+        c.a = 1f;
+        datePortrait.color = c;
+    }
+
     private IEnumerator FlickerPanel(CanvasGroup panel)
     {
         if (panel == null) yield break;
@@ -271,6 +363,33 @@ public class GameManager : MonoBehaviour
         }
 
         panel.alpha = 1;
+    }
+
+    private IEnumerator FadeScreenToBlack()
+    {
+        if (fadeOverlay == null)
+        {
+            Debug.LogWarning("Fade overlay not assigned!");
+            yield break;
+        }
+
+        fadeOverlay.gameObject.SetActive(true);
+
+        Color c = fadeOverlay.color;
+        c.a = 0f;
+        fadeOverlay.color = c;
+
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime / fadeDuration;
+            c.a = Mathf.SmoothStep(0f, 1f, t);
+            fadeOverlay.color = c;
+            yield return null;
+        }
+
+        c.a = 1f;
+        fadeOverlay.color = c;
     }
 
     // --- Optional Beta Behavior Flash ---
