@@ -1,0 +1,146 @@
+﻿title: DateScene
+---
+PLAYER: Oh God, she's already here. I can't believe I'm about to do this...
+//<<Riley appears>>
+RILEY: You finally made it! Here I thought you got lost.
+PLAYER: Uh-no, I just had to turn around for my uh... my glasses.
+Player: I, uh, need them to read the menu.
+<<RunStartupFlicker GameManager>>
+<<wait  3.0>>
+
+<<set $confidence = 50>>
+<<set $dateScore = 50>>
+
+// Player puts on the Alphavision glasses
+<<set_feedback GameManager "ALPHAVISION ONLINE. CONNECTING TO COACH">>
+RILEY: How swanky! Do those have a blue-light filter?
+<<set_feedback  GameManager "Hey man, can you read this? Say yes if you can">>
+<<wait  2.0>>
+PLAYER: Uh... yeah!
+<<jump LoadUI>>
+===
+
+title: LoadUI
+---
+<<set_feedback GameManager "This is the girl, right? Rating: soft 6/10.">>
+<<wait 1.0>>
+
+RILEY: You know, I've never seen you wear glasses around the store.
+-> Be Charming
+    <<jump Charming>>
+-> Deflect awkwardly
+    <<jump Deflect>>
+-> Overexplain
+    <<jump Overexplain>>
+
+
+<<set_feedback GameManager "Recovering composure... Suggest confident response.">>
+<<feedback_slide_out GameManager>>
+===
+
+title: Charming
+---
+PLAYER: What can I say? I like to keep you guessing.
+
+RILEY: Hah. I’ll give you points for confidence.
+
+<<increase_score GameManager 10 "Wit">>
+<<set_feedback GameManager "Not bad. Her points mean nothing, though.">>
+<<wait  2.0>>
+<<feedback_slide_out GameManager>>
+//<<jump MidScene>>
+===
+
+title: Deflect
+---
+PLAYER: Yeah, haha, just... regular glasses. For eyes. And seeing.
+
+RILEY: ...Right.
+
+<<decrease_score GameManager 5 "Lame joke">>
+<<set_feedback GameManager "WTF was that? Are you trying NOT to get laid?">>
+<<wait  2.0>>
+<<feedback_slide_out GameManager>>
+//<<jump MidScene>>
+===
+
+title: Overexplain
+---
+PLAYER: They’re smart glasses. My roommate's working on them, so they're still in beta.
+
+<<set_feedback GameManager "You sound like a nerd. That's Beta Male Behavior">>
+<<trigger_beta_warning GameManager>>
+<<decrease_score GameManager 10 "Overexplaining">>
+RILEY: Oh cool! You've gotta let me try them sometime.
+<<set_feedback  GameManager "Not in your dreams, female.">>
+<<wait  2.0>>
+<<feedback_slide_out GameManager>>
+//<<jump MidScene>>
+===
+
+title: MidScene
+---
+<<if $dateScore >= 70>>
+    <<set_feedback GameManager "Analysis: Strong rapport detected. Proceed with confidence.">>
+    <<feedback_slide_out GameManager>>
+    <<jump GoodEnding>>
+<<elseif $dateScore >= 50>>
+    <<set_feedback GameManager "Moderate success. You may still recover.">>
+    <<feedback_slide_out GameManager>>
+    <<jump NeutralEnding>>
+<<else>>
+    <<set_feedback GameManager "Warning: Connection failure imminent.">>
+    <<feedback_slide_out GameManager>>
+    <<jump BadEnding>>
+<<endif>>
+===
+
+title: GoodEnding
+---
+RILEY: You’re fun, you know that? I wasn’t expecting that.
+
+PLAYER: Guess I’m full of surprises.
+
+<<increase_score GameManager 10 "Flirtation successful">>
+<<set_feedback GameManager "Mission success. Date rating: Excellent.">>
+<<feedback_slide_out GameManager>>
+<<jump End>>
+===
+
+title: NeutralEnding
+---
+RILEY: Not bad. You’re a little awkward, but I like that.
+
+PLAYER: I’ll take what I can get.
+
+<<set_feedback GameManager "Partial success. Further calibration recommended.">>
+<<feedback_slide_out GameManager>>
+<<jump End>>
+===
+
+title: BadEnding
+---
+RILEY: I’m gonna... head out. Maybe another time.
+
+PLAYER: Yeah, sure... another time.
+
+<<trigger_beta_warning GameManager>>
+<<set_feedback GameManager "Mission failed. Try not to sound desperate next time.">>
+<<feedback_slide_out GameManager>>
+<<jump End>>
+===
+
+title: End
+---
+<<set_feedback GameManager "ALPHAVISION DEACTIVATING.">>
+<<feedback_slide_out GameManager>>
+
+-> Continue to next scene
+    <<jump NextScene>>
+===
+
+title: NextScene
+---
+<<set_feedback GameManager "Loading new environment...">>
+<<feedback_slide_out GameManager>>
+===

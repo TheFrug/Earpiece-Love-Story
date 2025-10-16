@@ -2,7 +2,10 @@
 ---
 MC: (sighs) Big night tonight...
 Roommate: Relax, man. Just trust the earpiece.
+<<feedback_slide_out GameManager>>
 MC: This feels unethical.
-Roommate: Ethics are for losers who don’t get second dates. 
+<<increase_score GameManager 10 "Clever joke">>
+<<set_feedback GameManager "Go fuck yourself">>
+Roommate: Ethics are for losers who don’t get second dates. [G]+10[/G]
 <<trigger_beta_warning GameManager>>
 === 
