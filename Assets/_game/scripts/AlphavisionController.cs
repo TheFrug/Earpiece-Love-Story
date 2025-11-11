@@ -7,7 +7,7 @@ using Yarn.Unity;
 
 public class AlphavisionController : MonoBehaviour
 {
-    public static AlphavisionController Instance { get; private set; }
+    public static AlphavisionController? Instance { get; private set; }
 
     [Header("Root")]
     [SerializeField] private RectTransform alphavisionRoot = default!;
@@ -43,8 +43,6 @@ public class AlphavisionController : MonoBehaviour
             confidencePanelCanvasGroup.alpha = 0;
     }
 
-    // --- Yarn Commands ---
-    [YarnCommand("RunStartupFlicker")]
     public void RunStartupFlicker()
     {
         StartCoroutine(StartupFlicker());

@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+    public static GameManager? Instance { get; private set; }
 
     // --- Core Game Variables ---
     [Header("Core Stats")]
@@ -16,38 +16,19 @@ public class GameManager : MonoBehaviour
     public int dateScore = 0;
     public bool betaBehaviorDetected = false;
 
-    // --- UI References ---
-    [Header("UI Elements")]
-    public GameObject betaBehaviorPanel;
-
-    [Header("Panel CanvasGroups")]
-    public CanvasGroup scorePanelCanvasGroup;
-    public CanvasGroup confidencePanelCanvasGroup;
-
-    [Header("Flash Settings")]
-    public float flashDuration = 0.2f;
-    public int flashCount = 3;
-    public float holdTime = 1f;
-    public float fadeTime = 1f;
-
-    [Header("Alphavision Slide-In")]
-    public RectTransform alphavisionRoot;
-    public Vector2 visorStartPos = new Vector2(0, 800);
-    public Vector2 visorEndPos = new Vector2(0, 0);
-    public float visorSlideDuration = 1.2f;
-    public float visorSlideDelay = 0.2f;
-
     [Header("Date Portrait Animation")]
-    [SerializeField] private Image datePortrait;
+    [SerializeField] private Image? datePortrait;
     [SerializeField] private float dateFadeDuration = 1.5f; // seconds
 
     [Header("Fade to Black")]
-    [SerializeField] private Image fadeOverlay;
+    [SerializeField] private Image? fadeOverlay;
     [SerializeField] private float fadeDuration = 1.5f;
 
-    // --- Internals ---
-    private CanvasGroup? betaCanvasGroup;
-    private Coroutine? betaFlashRoutine;
+    [Header("Controllers and Managers")]
+    [SerializeField] private AlphavisionController alphavision = null!;
+    [SerializeField] private BetaWarningController betaWarning = null!;
+    [SerializeField] private FeedbackUIController feedback = null!;
+    [SerializeField] private StatManager stats = null!;
 
     private void Awake()
     {
@@ -59,14 +40,6 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
-        if (betaBehaviorPanel != null)
-            betaCanvasGroup = betaBehaviorPanel.GetComponent<CanvasGroup>();
-
-        if (scorePanelCanvasGroup != null)
-            scorePanelCanvasGroup.alpha = 0;
-        if (confidencePanelCanvasGroup != null)
-            confidencePanelCanvasGroup.alpha = 0;
     }
 
     private void Update()
@@ -105,12 +78,6 @@ public class GameManager : MonoBehaviour
     }
 
     // --- Yarn Commands ---
-    [YarnCommand("RunStartupFlicker")]
-    public void RunStartupFlicker()
-    {
-        StartCoroutine(StartupFlicker());
-    }
-
     [YarnCommand("dateEnters")]
     public void DateEnters()
     {
@@ -123,39 +90,43 @@ public class GameManager : MonoBehaviour
         StartCoroutine(FadeScreenToBlack());
     }
 
+    [YarnCommand("RunStartupFlicker")]
+    public void RunStartupFlicker()
+    {
+        alphavision.RunStartupFlicker();
+    }
+
     [YarnCommand("trigger_beta_warning")]
     public void TriggerBetaWarning()
     {
-        if (betaFlashRoutine != null)
-            StopCoroutine(betaFlashRoutine);
+        betaWarning.TriggerBetaWarning();
+    }
 
-        betaFlashRoutine = StartCoroutine(BetaFlashRoutine());
+    [YarnCommand("set_feedback")]
+    public void SetFeedback(string text)
+    {
+        feedback.SetFeedbackText(text);
+    }
+
+    [YarnCommand("feedback_slide_out")]
+    public void SlideFeedbackOut()
+    {
+        feedback.FeedbackSlideOut();
+    }
+
+    [YarnCommand("increase_score")]
+    public void IncreaseScore(int amount, string reason)
+    {
+        stats.IncreaseScore(amount, reason);
+    }
+
+    [YarnCommand("decrease_score")]
+    public void DecreaseScore(int amount, string reason)
+    {
+        stats.DecreaseScore(amount, reason);
     }
 
     // --- Coroutines ---
-
-    private IEnumerator StartupFlicker()
-    {
-        // Slide in visor
-        if (alphavisionRoot != null)
-        {
-            alphavisionRoot.anchoredPosition = visorStartPos;
-            yield return new WaitForSeconds(visorSlideDelay);
-
-            float t = 0;
-            while (t < 1)
-            {
-                t += Time.deltaTime / visorSlideDuration;
-                float eased = Mathf.SmoothStep(0, 1, t);
-                alphavisionRoot.anchoredPosition = Vector2.Lerp(visorStartPos, visorEndPos, eased);
-                yield return null;
-            }
-        }
-
-        // Flicker in panels
-        yield return StartCoroutine(FlickerPanel(scorePanelCanvasGroup));
-        yield return StartCoroutine(FlickerPanel(confidencePanelCanvasGroup));
-    }
 
     private IEnumerator FadeInDatePortrait()
     {
@@ -183,21 +154,6 @@ public class GameManager : MonoBehaviour
         datePortrait.color = c;
     }
 
-    private IEnumerator FlickerPanel(CanvasGroup? panel)
-    {
-        if (panel == null) yield break;
-
-        for (int i = 0; i < flashCount; i++)
-        {
-            panel.alpha = 1;
-            yield return new WaitForSeconds(flashDuration);
-            panel.alpha = 0;
-            yield return new WaitForSeconds(flashDuration);
-        }
-
-        panel.alpha = 1;
-    }
-
     private IEnumerator FadeScreenToBlack()
     {
         if (fadeOverlay == null)
@@ -222,39 +178,5 @@ public class GameManager : MonoBehaviour
 
         c.a = 1f;
         fadeOverlay.color = c;
-    }
-
-    private IEnumerator BetaFlashRoutine()
-    {
-        if (betaCanvasGroup == null)
-            yield break;
-
-        betaBehaviorPanel.SetActive(true);
-        betaCanvasGroup.alpha = 0;
-
-        // 1. Flicker effect
-        for (int i = 0; i < flashCount; i++)
-        {
-            betaCanvasGroup.alpha = 1f;
-            yield return new WaitForSeconds(flashDuration);
-            betaCanvasGroup.alpha = 0f;
-            yield return new WaitForSeconds(flashDuration);
-        }
-
-        // 2. Hold fully visible
-        betaCanvasGroup.alpha = 1f;
-        yield return new WaitForSeconds(holdTime);
-
-        // 3. Fade out smoothly
-        float t = 0f;
-        while (t < fadeTime)
-        {
-            t += Time.deltaTime;
-            betaCanvasGroup.alpha = Mathf.Lerp(1f, 0f, t / fadeTime);
-            yield return null;
-        }
-
-        betaCanvasGroup.alpha = 0f;
-        betaBehaviorPanel.SetActive(false);
     }
 }

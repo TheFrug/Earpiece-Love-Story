@@ -31,8 +31,6 @@ public class FeedbackUIController : MonoBehaviour
             feedbackPanelCanvasGroup.alpha = 0f;
     }
 
-    // --- Yarn Commands ---
-    [YarnCommand("set_feedback")]
     public void SetFeedbackText(string newText)
     {
         if (feedbackRoutine != null)
@@ -49,8 +47,7 @@ public class FeedbackUIController : MonoBehaviour
         }
     }
 
-    [YarnCommand("feedback_slide_out")]
-    public void FeedbackSlideOut()
+        public void FeedbackSlideOut()
     {
         if (feedbackRoutine != null)
             StopCoroutine(feedbackRoutine);

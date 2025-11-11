@@ -36,7 +36,7 @@ public class StatManager : MonoBehaviour
     private void RefreshUI()
     {
         if (confidenceText != null)
-            confidenceText.text = $"Confidence: {confidence}%";
+            confidenceText.text = $"{confidence}%";
 
         if (dateScoreText != null)
         {
@@ -53,7 +53,7 @@ public class StatManager : MonoBehaviour
     {
         confidence = Mathf.Clamp(newValue, 0, 100);
         if (confidenceText != null)
-            confidenceText.text = $"Confidence: {confidence}%";
+            confidenceText.text = $"{dateScore}";
     }
 
     public void SetDateScore(int newValue)
@@ -66,11 +66,6 @@ public class StatManager : MonoBehaviour
         }
     }
 
-    // ---------------------------------------------------------------------
-    // Yarn Commands (3.0 syntax – safe for current runtime)
-    // ---------------------------------------------------------------------
-
-    [YarnCommand("increase_score")]
     public void IncreaseScore(int amount, string reason)
     {
         if (scoreChangeRoutine != null)
@@ -78,7 +73,6 @@ public class StatManager : MonoBehaviour
         scoreChangeRoutine = StartCoroutine(ScoreChangeAnimation(amount, reason, true));
     }
 
-    [YarnCommand("decrease_score")]
     public void DecreaseScore(int amount, string reason)
     {
         if (scoreChangeRoutine != null)
