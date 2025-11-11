@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,28 +18,17 @@ public class GameManager : MonoBehaviour
 
     // --- UI References ---
     [Header("UI Elements")]
-    public TMP_Text confidenceText;
-    public TMP_Text dateScoreText;
-    public TMP_Text feedbackText;
-    public TMP_Text scoreChangeText; // floating +10 “reason” text
-    public GameObject feedbackPanel;
     public GameObject betaBehaviorPanel;
 
     [Header("Panel CanvasGroups")]
     public CanvasGroup scorePanelCanvasGroup;
     public CanvasGroup confidencePanelCanvasGroup;
-    public CanvasGroup feedbackPanelCanvasGroup;
 
     [Header("Flash Settings")]
     public float flashDuration = 0.2f;
     public int flashCount = 3;
     public float holdTime = 1f;
     public float fadeTime = 1f;
-
-    [Header("Feedback Animation")]
-    public float feedbackSlideDuration = 0.6f;
-    public Vector2 feedbackOnScreenPos = new Vector2(0, 0);
-    public Vector2 feedbackOffScreenPos = new Vector2(0, -250);
 
     [Header("Alphavision Slide-In")]
     public RectTransform alphavisionRoot;
@@ -55,20 +45,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image fadeOverlay;
     [SerializeField] private float fadeDuration = 1.5f;
 
-    // --- Score Color Thresholds ---
-    [Header("Score Colors (Low → High)")]
-    public Color scoreColor0to59 = new Color(0.8f, 0.2f, 0.2f);   // red
-    public Color scoreColor60to69 = new Color(1f, 0.5f, 0f);      // orange
-    public Color scoreColor70to79 = new Color(1f, 0.8f, 0f);      // yellow
-    public Color scoreColor80to89 = new Color(0.85f, 1f, 0.4f);   // yellow-green
-    public Color scoreColor90to100 = new Color(0.02f, 0.87f, 0.45f); // green (#05DF72)
-
-    private CanvasGroup betaCanvasGroup;
-    private Coroutine betaFlashRoutine;
-    private Coroutine feedbackRoutine;
-    private RectTransform feedbackRect;
-
-    private bool isFeedbackVisible = false;
+    // --- Internals ---
+    private CanvasGroup? betaCanvasGroup;
+    private Coroutine? betaFlashRoutine;
 
     private void Awake()
     {
@@ -77,32 +56,26 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
         if (betaBehaviorPanel != null)
             betaCanvasGroup = betaBehaviorPanel.GetComponent<CanvasGroup>();
-        if (feedbackPanel != null)
-            feedbackRect = feedbackPanel.GetComponent<RectTransform>();
 
-        if (scorePanelCanvasGroup != null) scorePanelCanvasGroup.alpha = 0;
-        if (confidencePanelCanvasGroup != null) confidencePanelCanvasGroup.alpha = 0;
-        if (feedbackPanelCanvasGroup != null) feedbackPanelCanvasGroup.alpha = 0;
+        if (scorePanelCanvasGroup != null)
+            scorePanelCanvasGroup.alpha = 0;
+        if (confidencePanelCanvasGroup != null)
+            confidencePanelCanvasGroup.alpha = 0;
     }
 
     private void Update()
     {
-        // ENTER → reload the scene
         if (Input.GetKeyDown(KeyCode.R))
-        {
             ReloadScene();
-        }
 
-        // ESC → quit the application
         if (Input.GetKeyDown(KeyCode.Escape))
-        {
             QuitGame();
-        }
     }
 
     private void ReloadScene()
@@ -114,12 +87,10 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        // Stop all Yarn coroutines safely
-        var runner = FindObjectOfType<Yarn.Unity.DialogueRunner>();
+        var runner = FindObjectOfType<DialogueRunner>();
         if (runner != null)
             runner.Stop();
 
-        // Reload
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.buildIndex);
     }
@@ -127,12 +98,13 @@ public class GameManager : MonoBehaviour
     private void QuitGame()
     {
     #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false; // stop playmode if testing
+        UnityEditor.EditorApplication.isPlaying = false;
     #else
-            Application.Quit(); // close the built app
+        Application.Quit();
     #endif
     }
 
+    // --- Yarn Commands ---
     [YarnCommand("RunStartupFlicker")]
     public void RunStartupFlicker()
     {
@@ -151,160 +123,23 @@ public class GameManager : MonoBehaviour
         StartCoroutine(FadeScreenToBlack());
     }
 
-    // --- UI Update Methods ---
-
-    public void SetConfidence(int newValue)
+    [YarnCommand("trigger_beta_warning")]
+    public void TriggerBetaWarning()
     {
-        confidence = Mathf.Clamp(newValue, 0, 100);
-        if (confidenceText != null)
-            confidenceText.text = $"Confidence: {confidence}%";
+        if (betaFlashRoutine != null)
+            StopCoroutine(betaFlashRoutine);
+
+        betaFlashRoutine = StartCoroutine(BetaFlashRoutine());
     }
 
-    public void SetDateScore(int newValue)
-    {
-        dateScore = Mathf.Clamp(newValue, 0, 100);
+    // --- Coroutines ---
 
-        if (dateScoreText != null)
-        {
-            dateScoreText.text = $"{dateScore}";
-            dateScoreText.color = GetScoreColor(dateScore);
-        }
-    }
-
-    // --- Score Commands for Yarn ---
-    [YarnCommand("increase_score")]
-    public void IncreaseScore(int amount, string reason)
-    {
-        StartCoroutine(ScoreChangeRoutine(amount, reason, true));
-    }
-
-    [YarnCommand("decrease_score")]
-    public void DecreaseScore(int amount, string reason)
-    {
-        StartCoroutine(ScoreChangeRoutine(amount, reason, false));
-    }
-
-    private IEnumerator ScoreChangeRoutine(int amount, string reason, bool isIncrease)
-    {
-        int newScore = isIncrease ? dateScore + amount : dateScore - amount;
-        SetDateScore(newScore);
-
-        if (scoreChangeText != null)
-        {
-            scoreChangeText.text = (isIncrease ? "+" : "-") + amount + "  " + reason;
-            scoreChangeText.color = isIncrease ? scoreColor90to100 : scoreColor0to59;
-            scoreChangeText.alpha = 1f;
-
-            Vector3 startPos = scoreChangeText.rectTransform.anchoredPosition;
-            Vector3 endPos = startPos + new Vector3(0, 80f, 0); // move slower and higher
-            float duration = 2.5f; // slower total movement
-
-            float t = 0f;
-            while (t < 1f)
-            {
-                t += Time.deltaTime / duration;
-
-                // Smooth motion and fade
-                float easedT = Mathf.SmoothStep(0, 1, t);
-                scoreChangeText.rectTransform.anchoredPosition = Vector3.Lerp(startPos, endPos, easedT);
-                scoreChangeText.alpha = Mathf.Lerp(1f, 0f, Mathf.Pow(t, 1.5f)); // fade slower at start, faster at end
-
-                yield return null;
-            }
-
-            scoreChangeText.text = "";
-            scoreChangeText.rectTransform.anchoredPosition = startPos;
-        }
-    }
-
-    private Color GetScoreColor(int score)
-    {
-        if (score < 60) return scoreColor0to59;
-        if (score < 70) return scoreColor60to69;
-        if (score < 80) return scoreColor70to79;
-        if (score < 90) return scoreColor80to89;
-        return scoreColor90to100;
-    }
-
-
-    // --- Yarn command for feedback (Slide In) ---
-    [YarnCommand("set_feedback")]
-    public void SetFeedbackText(string newText)
-    {
-        if (feedbackRoutine != null)
-            StopCoroutine(feedbackRoutine);
-
-        // If feedback is already visible, just update text (no re-animation)
-        if (isFeedbackVisible)
-        {
-            feedbackText.text = newText;
-        }
-        else
-        {
-            feedbackRoutine = StartCoroutine(AnimateFeedbackIn(newText));
-        }
-    }
-
-    // --- Yarn command for feedback slide out ---
-    [YarnCommand("feedback_slide_out")]
-    public void FeedbackSlideOut()
-    {
-        if (feedbackRoutine != null)
-            StopCoroutine(feedbackRoutine);
-        feedbackRoutine = StartCoroutine(AnimateFeedbackOut());
-    }
-
-    // --- Feedback panel slide in ---
-    private IEnumerator AnimateFeedbackIn(string newText)
-    {
-        if (feedbackRect == null || feedbackText == null)
-            yield break;
-
-        isFeedbackVisible = true;
-        feedbackText.text = newText;
-        feedbackPanelCanvasGroup.alpha = 1f;
-
-        float t = 0;
-        while (t < 1)
-        {
-            t += Time.deltaTime / feedbackSlideDuration;
-            feedbackRect.anchoredPosition = Vector2.Lerp(feedbackOffScreenPos, feedbackOnScreenPos, Mathf.SmoothStep(0, 1, t));
-            yield return null;
-        }
-
-        // stay visible for 5 seconds before auto-slide-out
-        yield return new WaitForSeconds(5f);
-        FeedbackSlideOut();
-    }
-
-    // --- Feedback panel slide out ---
-    private IEnumerator AnimateFeedbackOut()
-    {
-        if (feedbackRect == null)
-            yield break;
-
-        float t = 0;
-        while (t < 1)
-        {
-            t += Time.deltaTime / feedbackSlideDuration;
-            feedbackRect.anchoredPosition = Vector2.Lerp(feedbackOnScreenPos, feedbackOffScreenPos, Mathf.SmoothStep(0, 1, t));
-            yield return null;
-        }
-
-        feedbackPanelCanvasGroup.alpha = 0;
-        feedbackText.text = "";
-        isFeedbackVisible = false;
-    }
-
-    // --- Flicker Startup Sequence ---
     private IEnumerator StartupFlicker()
     {
-        // Visor slides down first
+        // Slide in visor
         if (alphavisionRoot != null)
         {
-            Vector2 startPos = visorStartPos;
-            Vector2 endPos = visorEndPos;
-            alphavisionRoot.anchoredPosition = startPos;
+            alphavisionRoot.anchoredPosition = visorStartPos;
             yield return new WaitForSeconds(visorSlideDelay);
 
             float t = 0;
@@ -312,15 +147,14 @@ public class GameManager : MonoBehaviour
             {
                 t += Time.deltaTime / visorSlideDuration;
                 float eased = Mathf.SmoothStep(0, 1, t);
-                alphavisionRoot.anchoredPosition = Vector2.Lerp(startPos, endPos, eased);
+                alphavisionRoot.anchoredPosition = Vector2.Lerp(visorStartPos, visorEndPos, eased);
                 yield return null;
             }
         }
 
-        // After visor slides in, flicker panels
+        // Flicker in panels
         yield return StartCoroutine(FlickerPanel(scorePanelCanvasGroup));
         yield return StartCoroutine(FlickerPanel(confidencePanelCanvasGroup));
-        yield return StartCoroutine(FlickerPanel(feedbackPanelCanvasGroup));
     }
 
     private IEnumerator FadeInDatePortrait()
@@ -331,7 +165,6 @@ public class GameManager : MonoBehaviour
             yield break;
         }
 
-        // Ensure it's visible and reset transparency
         Color c = datePortrait.color;
         c.a = 0f;
         datePortrait.color = c;
@@ -350,7 +183,7 @@ public class GameManager : MonoBehaviour
         datePortrait.color = c;
     }
 
-    private IEnumerator FlickerPanel(CanvasGroup panel)
+    private IEnumerator FlickerPanel(CanvasGroup? panel)
     {
         if (panel == null) yield break;
 
@@ -374,7 +207,6 @@ public class GameManager : MonoBehaviour
         }
 
         fadeOverlay.gameObject.SetActive(true);
-
         Color c = fadeOverlay.color;
         c.a = 0f;
         fadeOverlay.color = c;
@@ -392,21 +224,11 @@ public class GameManager : MonoBehaviour
         fadeOverlay.color = c;
     }
 
-    // --- Optional Beta Behavior Flash ---
-    [YarnCommand("trigger_beta_warning")]
-    public void TriggerBetaWarning()
-    {
-        if (betaFlashRoutine != null)
-            StopCoroutine(betaFlashRoutine);
-        betaFlashRoutine = StartCoroutine(BetaFlashRoutine());
-    }
-
     private IEnumerator BetaFlashRoutine()
     {
         if (betaCanvasGroup == null)
             yield break;
 
-        // make sure it's active and visible
         betaBehaviorPanel.SetActive(true);
         betaCanvasGroup.alpha = 0;
 
@@ -435,5 +257,4 @@ public class GameManager : MonoBehaviour
         betaCanvasGroup.alpha = 0f;
         betaBehaviorPanel.SetActive(false);
     }
-
 }
