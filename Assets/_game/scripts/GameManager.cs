@@ -49,6 +49,26 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
             QuitGame();
+
+        // Debug Commands
+        if (Input.GetKeyDown(KeyCode.A))
+            SetFeedback("Remember: you are in charge here, not her.");
+
+        if (Input.GetKeyDown(KeyCode.S))
+            SlideFeedbackOut();
+                    
+        if (Input.GetKeyDown(KeyCode.B))
+            TriggerBetaWarning();
+
+        if (Input.GetKeyDown(KeyCode.F))
+            RunStartupFlicker();
+
+        if (Input.GetKeyDown(KeyCode.I))
+            IncreaseScore(10, "Dominance");
+        
+        if (Input.GetKeyDown(KeyCode.D))
+            DecreaseScore(10, "Never Show Weakness");
+        
     }
 
     private void ReloadScene()

@@ -194,11 +194,13 @@ position: -714,1713
 <<set_feedback GameManager "You just beefed it, bro">>
 MARY: Yes! It's stegosaurus! 
 PLAYER: Great choice! I'm a triceratops guy, myself.
+<<trigger_beta_warning GameManager>>
 <<decrease_score GameManager 20 "Insubordination">>
 <<set_feedback GameManager "ABORT. If you engage with her, she will never relent control!">>
 <<wait 1.0>>
 MARY: If you like triceratops, you'll love hearing about my current lab.
 PLAYER: No way. Its not secret is it?
+<<trigger_beta_warning GameManager>>
 <<decrease_score GameManager 20 "Beta">>
 <<set_feedback GameManager "You have failed the alpha program. Good luck getting cucked, loser.">>
 <<fadeToBlack GameManager>>
@@ -212,7 +214,6 @@ MARY: I'll see you at work on Monday.
 
 PLAYER: Yeah, sure... another time.
 
-<<trigger_beta_warning GameManager>>
 <<set_feedback GameManager "You've got her. She'll come crawling back for more soon.">>
 <<wait  2.0>>
 <<fadeToBlack GameManager>>

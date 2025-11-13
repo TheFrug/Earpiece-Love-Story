@@ -26,17 +26,19 @@ public class StatManager : MonoBehaviour
     [SerializeField] private Color scoreColor80to89 = new Color(0.85f, 1f, 0.4f);
     [SerializeField] private Color scoreColor90to100 = new Color(0.02f, 0.87f, 0.45f);
 
+    private Vector3 scoreChangeTextStartPos;
     private Coroutine scoreChangeRoutine;
 
     private void Start()
     {
+        scoreChangeTextStartPos = scoreChangeText.rectTransform.anchoredPosition;
         RefreshUI();
     }
 
     private void RefreshUI()
     {
         if (confidenceText != null)
-            confidenceText.text = $"{confidence}%";
+            confidenceText.text = $"{confidence}";
 
         if (dateScoreText != null)
         {
@@ -98,8 +100,7 @@ public class StatManager : MonoBehaviour
         scoreChangeText.alpha = 1f;
 
         // Floating animation
-        Vector3 startPos = scoreChangeText.rectTransform.anchoredPosition;
-        Vector3 endPos = startPos + new Vector3(0, 80f, 0);
+        Vector3 endPos = scoreChangeTextStartPos + new Vector3(0, 80f, 0);
         float duration = 2.5f;
         float t = 0f;
 
@@ -107,13 +108,13 @@ public class StatManager : MonoBehaviour
         {
             t += Time.deltaTime / duration;
             float eased = Mathf.SmoothStep(0f, 1f, t);
-            scoreChangeText.rectTransform.anchoredPosition = Vector3.Lerp(startPos, endPos, eased);
+            scoreChangeText.rectTransform.anchoredPosition = Vector3.Lerp(scoreChangeTextStartPos, endPos, eased);
             scoreChangeText.alpha = Mathf.Lerp(1f, 0f, Mathf.Pow(t, 1.5f));
             yield return null;
         }
 
         scoreChangeText.text = string.Empty;
-        scoreChangeText.rectTransform.anchoredPosition = startPos;
+        scoreChangeText.rectTransform.anchoredPosition = scoreChangeTextStartPos;
     }
 
     private Color GetScoreColor(int score)

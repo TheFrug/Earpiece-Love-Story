@@ -61,7 +61,6 @@ public class FeedbackUIController : MonoBehaviour
         if (feedbackRect == null || feedbackText == null)
             yield break;
 
-        isFeedbackVisible = true;
         feedbackText.text = newText;
         feedbackPanelCanvasGroup.alpha = 1f;
 
@@ -74,12 +73,13 @@ public class FeedbackUIController : MonoBehaviour
                 feedbackOnScreenPos,
                 Mathf.SmoothStep(0f, 1f, t)
             );
+            isFeedbackVisible = true;
             yield return null;
         }
 
         // Stay visible for a bit, then slide out
         yield return new WaitForSeconds(autoHideDelay);
-        FeedbackSlideOut();
+        //FeedbackSlideOut();
     }
 
     private IEnumerator AnimateFeedbackOut()
