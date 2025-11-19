@@ -93,13 +93,13 @@ Shader "Custom/Text/RedGlassesText"
                 pixelPos = floor(pixelPos / max(1.0, _NoiseScale));
 
                 // Generate independent noise for Green and Blue channels
-                float noiseR = hash(pixelPos) * 0.5 + 0.5;
+                float noiseR = hash(pixelPos);
                 float noiseG = hash(pixelPos + float2(100.0, 100.0));
                 float noiseB = hash(pixelPos + float2(200.0, 200.0));
 
                 float channelR = noiseR;
-                if (textAlpha > 0.9) channelR = 0.85;
-                else if (textAlpha > 0.1) channelR = 0.65;
+                if (textAlpha > 0.9) channelR = 0.85    ;
+                else if (textAlpha > 0.1) channelR = 0.6;
 
                 return fixed4(channelR, noiseG, noiseB, 1.0);
             }

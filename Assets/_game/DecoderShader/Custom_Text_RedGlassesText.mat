@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Custom_Text_RedGlassesText
-  m_Shader: {fileID: 4800000, guid: 4629940098c2cf84da1f6921c366175d, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0643f627b98952d49bef067c5998681e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

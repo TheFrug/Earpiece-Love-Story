@@ -8,6 +8,7 @@ Shader "Hidden/NewImageEffectShader"
     }
     SubShader
     {
+        Tags { "Queue"="Transparent" "RenderType"="Transparent" }
         // No culling or depth
         Cull Off ZWrite Off ZTest Always
 
@@ -55,7 +56,7 @@ Shader "Hidden/NewImageEffectShader"
                 
                 float2 pixelPos = i.uv * _ScreenParams.xy;
                 
-                col.r = hash(pixelPos) * 0.5 + 0.5;
+                col.r = hash(pixelPos);
                 col.g = hash(pixelPos + float2(100.0, 100.0));
                 col.b = hash(pixelPos + float2(200.0, 200.0));
 

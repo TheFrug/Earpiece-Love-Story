@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Hidden_NewImageEffectShader
-  m_Shader: {fileID: 4800000, guid: 433b619bc1442fe4f8b63a50ca300dbd, type: 3}
+  m_Shader: {fileID: 4800000, guid: 6624216e0235b954384bee9fef185a4d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

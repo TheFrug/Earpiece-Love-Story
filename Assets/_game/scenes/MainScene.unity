@@ -283,6 +283,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7238003862022874147, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7262066351540048079, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_Name
       value: DialogueSystemCustom
@@ -418,14 +422,6 @@ PrefabInstance:
     - target: {fileID: 8472873117799914769, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_Color.r
       value: 0.3097188
-      objectReference: {fileID: 0}
-    - target: {fileID: 9055671587631640432, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 9055671587631640432, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -24
       objectReference: {fileID: 0}
     - target: {fileID: 9179752466859893922, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_AnchoredPosition.y
