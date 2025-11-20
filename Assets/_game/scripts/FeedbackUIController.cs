@@ -8,7 +8,8 @@ using Yarn.Unity;
 public class FeedbackUIController : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private TMP_Text feedbackText = null!;
+    [SerializeField] private TMP_Text feedbackTextShaded = null!;
+    [SerializeField] private TMP_Text feedbackTextNormal = null!;
     [SerializeField] private GameObject feedbackPanel = null!;
     [SerializeField] private CanvasGroup feedbackPanelCanvasGroup = null!;
 
@@ -31,7 +32,7 @@ public class FeedbackUIController : MonoBehaviour
             feedbackPanelCanvasGroup.alpha = 0f;
     }
 
-    public void SetFeedbackText(string newText)
+    public void SetFeedback(string newText)
     {
         if (feedbackRoutine != null)
             StopCoroutine(feedbackRoutine);
@@ -39,7 +40,8 @@ public class FeedbackUIController : MonoBehaviour
         // If already visible, just update text without reanimation
         if (isFeedbackVisible)
         {
-            feedbackText.text = newText;
+            feedbackTextShaded.text = newText;
+            feedbackTextNormal.text = newText;
         }
         else
         {
@@ -58,10 +60,11 @@ public class FeedbackUIController : MonoBehaviour
     // --- Animation Coroutines ---
     private IEnumerator AnimateFeedbackIn(string newText)
     {
-        if (feedbackRect == null || feedbackText == null)
+        if (feedbackRect == null || feedbackTextShaded == null)
             yield break;
 
-        feedbackText.text = newText;
+        feedbackTextShaded.text = newText;
+        feedbackTextNormal.text = newText;
         feedbackPanelCanvasGroup.alpha = 1f;
 
         float t = 0f;
@@ -100,7 +103,8 @@ public class FeedbackUIController : MonoBehaviour
         }
 
         feedbackPanelCanvasGroup.alpha = 0f;
-        feedbackText.text = "";
+        feedbackTextShaded.text = "";
+        feedbackTextNormal.text = "";
         isFeedbackVisible = false;
     }
 }

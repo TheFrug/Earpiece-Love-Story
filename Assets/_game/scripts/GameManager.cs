@@ -72,7 +72,25 @@ public class GameManager : MonoBehaviour
             DecreaseScore(10, "Never Show Weakness");
                     
         if (Input.GetKeyDown(KeyCode.Alpha7))
-            ShowItemCommand("steak");
+            ShowItem("steak");
+                                
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+            ShowItem("smartGlasses");
+                                
+        if (Input.GetKeyDown(KeyCode.Z))
+            ChangeExpression("Happy");
+                                
+        if (Input.GetKeyDown(KeyCode.X))
+            ChangeExpression("Angry");
+                                            
+        if (Input.GetKeyDown(KeyCode.C))
+            ChangeExpression("Confused");
+                                            
+        if (Input.GetKeyDown(KeyCode.V))
+            ChangeExpression("Laughing");
+                                                        
+        if (Input.GetKeyDown(KeyCode.B))
+            ChangeExpression("Neutral");
         
     }
 
@@ -130,7 +148,7 @@ public class GameManager : MonoBehaviour
     [YarnCommand("setFeedback")]
     public void SetFeedback(string text)
     {
-        feedback.SetFeedbackText(text);
+        feedback.SetFeedback(text);
     }
 
     [YarnCommand("feedbackSlideOut")]
@@ -152,7 +170,7 @@ public class GameManager : MonoBehaviour
     }
 
     [YarnCommand("changeExpression")]
-    public void ChangeExpressionFromYarn(string expressionKey)
+    public void ChangeExpression(string expressionKey)
     {
         if (expression == null) {
             Debug.LogWarning("GameManager: ExpressionController reference not set!");
@@ -163,7 +181,7 @@ public class GameManager : MonoBehaviour
     }
 
     [YarnCommand("showItem")]
-    public void ShowItemCommand(string itemCode)
+    public void ShowItem(string itemCode)
     {
         item.ShowItem(itemCode);
     }
