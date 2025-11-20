@@ -5,14 +5,16 @@ PLAYER: Oh God, she's already here. I can't believe I'm about to do this...
 <<dateEnters GameManager>>
 MARY: Hey Claude, you finally made it! Here I thought you got lost.
 PLAYER: Uh-no, I just had to turn around for my uh... my glasses.
+<<showItem GameManager "smartGlasses">>
 PLAYER: I need them... to read the menu.
-<<RunStartupFlicker GameManager>>
+<<runStartupFlicker GameManager>>
 <<wait  2.0>>
 
 // Player puts on the Alphavision glasses
-<<set_feedback GameManager "ALPHAVISION ONLINE. CONNECTING TO COACH">>
+<<setFeedback GameManager "ALPHAVISION ONLINE. CONNECTING TO COACH">>
+<<changeExpression GameManager "Happy">>
 MARY: How swanky! Do those have a blue-light filter?
-<<set_feedback  GameManager "Hey man, can you read this? Say yes if you can">>
+<<setFeedback  GameManager "Hey man, can you read this? Say yes if you can">>
 <<wait  2.0>>
 PLAYER: Uh... yes!
 <<jump LoadUI>>
@@ -21,9 +23,9 @@ PLAYER: Uh... yes!
 title: LoadUI
 position: -348,-241
 ---
-<<set_feedback GameManager "This is the girl, right? Rating: soft 6/10.">>
+<<setFeedback GameManager "This is the girl, right? Rating: soft 6/10.">>
 <<wait 1.0>>
-
+<<changeExpression GameManager "Confused">>
 MARY: You know, I've never seen you wear glasses around the store.
 -> Be Charming
     <<jump Charming>>
@@ -32,19 +34,19 @@ MARY: You know, I've never seen you wear glasses around the store.
 -> Overexplain
     <<jump Overexplain>>
 
-<<set_feedback GameManager "Recovering composure... Suggest confident response.">>
-<<feedback_slide_out GameManager>>
+<<setFeedback GameManager "Recovering composure... Suggest confident response.">>
+<<feedbackSlideOut GameManager>>
 ===
 
 title: Charming
 position: -142,-47
 ---
 PLAYER: What can I say? I like to keep you guessing.
-
+<<changeExpression GameManager "Happy">>
 MARY: Hah. I’ll give you points for confidence.
 
-<<increase_score GameManager 10 "Wit">>
-<<set_feedback GameManager "Not bad. Her points mean nothing, though.">>
+<<increaseScore GameManager 10 "Wit">>
+<<setFeedback GameManager "Not bad. Her points mean nothing, though.">>
 <<wait  1.5>>
 <<jump MidScene>>
 ===
@@ -56,8 +58,8 @@ PLAYER: Yeah, haha, just... regular glasses. For eyes. And seeing.
 
 MARY: ...Right.
 
-<<decrease_score GameManager 10 "Lame joke">>
-<<set_feedback GameManager "WTF was that? Are you trying NOT to get laid?">>
+<<decreaseScore GameManager 10 "Lame joke">>
+<<setFeedback GameManager "WTF was that? Are you trying NOT to get laid?">>
 <<wait  1.5>>
 <<jump MidScene>>
 ===
@@ -67,18 +69,19 @@ position: -687,-3
 ---
 PLAYER: They’re smart glasses. My roommate's working on them, so they're still in beta.
 
-<<set_feedback GameManager "You sound like a nerd. That's Beta Male Behavior">>
-<<trigger_beta_warning GameManager>>
-<<decrease_score GameManager 10 "Overexplaining">>
+<<setFeedback GameManager "You sound like a nerd. That's Beta Male Behavior">>
+<<triggerBetaWarning GameManager>>
+<<decreaseScore GameManager 10 "Overexplaining">>
 MARY: Oh cool! You've gotta let me try them sometime.
-<<set_feedback  GameManager "Not in your dreams, female.">>
+<<setFeedback  GameManager "Not in your dreams, female.">>
 <<jump MidScene>>
 ===
 
 title: MidScene
 position: -371,316
 ---
-<<set_feedback GameManager "Take control: talk about something you know. Except dinosaurs, that's lame.">>
+<<changeExpression GameManager "Neutral">>
+<<setFeedback GameManager "Take control: talk about something you know. Except dinosaurs, that's lame.">>
 <<wait  1.0>>
 PLAYER: Aw man...
 MARY: Hm? Did something happen?
@@ -93,7 +96,7 @@ position: -274,509
 ---
 PLAYER: Oh, nothing bad. I'm just thinking about... my project.
 MARY: Oh jeez, I know how that feels.
-<<set_feedback GameManager "She's trying to connect with you? An Alpha? Regain control">>
+<<setFeedback GameManager "She's trying to connect with you? An Alpha? Regain control">>
 <<wait  1.0>>
 -> Insist she doesn't understand
     <<jump Brag>>
@@ -108,8 +111,8 @@ position: -542,789
 ---
 PLAYER: Oh please, I don't think you do. 
 MARY: Um, excuse me? What kind of project is it?
-<<increase_score GameManager 10 Negging>>
-<<set_feedback GameManager "Good. Now you have her attention">>
+<<increaseScore GameManager 10 Negging>>
+<<setFeedback GameManager "Good. Now you have her attention">>
 -> Say your project will cure cancer (lie)
     <<jump projectCancer>>
 -> Say your project will make you tons of money (lie)
@@ -123,11 +126,11 @@ position: -443,1201
 ---
 PLAYER: I'm working on a little thing called... the cure for cancer!
 MARY: (chuckles) Claude, there's no way you're gonna cure cancer.
-<<set_feedback GameManager "Is this ***** is making fun of you?">>
-<<decrease_score GameManager 10 Mockery>>
+<<setFeedback GameManager "Is this ***** is making fun of you?">>
+<<decreaseScore GameManager 10 Mockery>>
 MARY: Still, if its lab work, I understand if you have to keep it secret.
 MARY: I have a weekly lab [i]and[/i] a bunch of school work I've been thinking about.
-<<set_feedback GameManager "This is a good opportunity to feign interest, and then insult her. Trust me.">>
+<<setFeedback GameManager "This is a good opportunity to feign interest, and then insult her. Trust me.">>
 PLAYER: School? What do you study?
 <<jump Paleontologist>>
 ===
@@ -136,11 +139,11 @@ title: projectMoney
 position: -703,1182
 ---
 PLAYER: I'm working on my startup. I'll probably be rich by this time next year.
-<<set_feedback Gamemanager "Excellent save. Chicks love money.">>
-<<increase_score GameManager 10 "Money Talks">>
+<<setFeedback Gamemanager "Excellent save. Chicks love money.">>
+<<increaseScore GameManager 10 "Money Talks">>
 MARY: Oh, neat.
 MARY: I kind of envy you, actually. I'm too busy with school to pursue big things like that.
-<<set_feedback GameManager "This is a good opportunity to feign interest, and then insult her. Trust me.">>
+<<setFeedback GameManager "This is a good opportunity to feign interest, and then insult her. Trust me.">>
 PLAYER: Oh? What do you study?
 <<jump Paleontologist>>
 
@@ -150,11 +153,11 @@ title: projectNone
 position: -983,1198
 ---
 PLAYER: Er- there is no project. I just wanted you to think I'm smart.
-<<set_feedback GameManager "NEVER admit to your lies. She needs to implicitly trust you.">>
-<<decrease_score GameManager -10 "Truth-teller">>
+<<setFeedback GameManager "NEVER admit to your lies. She needs to implicitly trust you.">>
+<<decreaseScore GameManager -10 "Truth-teller">>
 MARY: ...
 MARY: That's OK! You've got work going on. I can barely keep up between that and school.
-<<set_feedback GameManager "This is a good opportunity to feign interest, and then insult her. Trust me.">>
+<<setFeedback GameManager "This is a good opportunity to feign interest, and then insult her. Trust me.">>
 PLAYER: School? What do you study?
 <<jump Paleontologist>>
 ===
@@ -179,7 +182,7 @@ position: -545,1483
 ---
 MARY: I thought I told you? I'm a paleontology student!
 PLAYER: Wait, does that mean...?
-<<set_feedback GameManager "This is dangerous territory. Never let a female control the frame of conversation">>
+<<setFeedback GameManager "This is dangerous territory. Never let a female control the frame of conversation">>
 -> DO YOU HAVE A FAVORITE DINOSAUR?
     <<jump GoodEnding>>
 -> Uh, sounds lame
@@ -189,20 +192,20 @@ PLAYER: Wait, does that mean...?
 title: GoodEnding
 position: -714,1713
 ---
-<<trigger_beta_warning GameManager>>
-<<decrease_score GameManager 20 "Feining Interest">>
-<<set_feedback GameManager "You just beefed it, bro">>
+<<triggerBetaWarning GameManager>>
+<<decreaseScore GameManager 20 "Feining Interest">>
+<<setFeedback GameManager "You just beefed it, bro">>
 MARY: Yes! It's stegosaurus! 
 PLAYER: Great choice! I'm a triceratops guy, myself.
-<<trigger_beta_warning GameManager>>
-<<decrease_score GameManager 20 "Insubordination">>
-<<set_feedback GameManager "ABORT. If you engage with her, she will never relent control!">>
+<<triggerBetaWarning GameManager>>
+<<decreaseScore GameManager 20 "Insubordination">>
+<<setFeedback GameManager "ABORT. If you engage with her, she will never relent control!">>
 <<wait 1.0>>
 MARY: If you like triceratops, you'll love hearing about my current lab.
 PLAYER: No way. Its not secret is it?
-<<trigger_beta_warning GameManager>>
-<<decrease_score GameManager 20 "Beta">>
-<<set_feedback GameManager "You have failed the alpha program. Good luck getting cucked, loser.">>
+<<triggerBetaWarning GameManager>>
+<<decreaseScore GameManager 20 "Beta">>
+<<setFeedback GameManager "You have failed the alpha program. Good luck getting cucked, loser.">>
 <<fadeToBlack GameManager>>
 ===
 
@@ -214,7 +217,7 @@ MARY: I'll see you at work on Monday.
 
 PLAYER: Yeah, sure... another time.
 
-<<set_feedback GameManager "You've got her. She'll come crawling back for more soon.">>
+<<setFeedback GameManager "You've got her. She'll come crawling back for more soon.">>
 <<wait  2.0>>
 <<fadeToBlack GameManager>>
 ===

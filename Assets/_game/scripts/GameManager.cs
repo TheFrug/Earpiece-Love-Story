@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BetaWarningController betaWarning = null!;
     [SerializeField] private FeedbackUIController feedback = null!;
     [SerializeField] private StatManager stats = null!;
+    [SerializeField] private ExpressionController expression = null!;
+    [SerializeField] private ItemPresenter item = null!;
 
     private void Awake()
     {
@@ -51,23 +53,26 @@ public class GameManager : MonoBehaviour
             QuitGame();
 
         // Debug Commands
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
             SetFeedback("Remember: you are in charge here, not her.");
 
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
             SlideFeedbackOut();
                     
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
             TriggerBetaWarning();
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
             RunStartupFlicker();
 
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.Alpha5))
             IncreaseScore(10, "Dominance");
         
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.Alpha6))
             DecreaseScore(10, "Never Show Weakness");
+                    
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+            ShowItemCommand("steak");
         
     }
 
@@ -110,40 +115,57 @@ public class GameManager : MonoBehaviour
         StartCoroutine(FadeScreenToBlack());
     }
 
-    [YarnCommand("RunStartupFlicker")]
+    [YarnCommand("runStartupFlicker")]
     public void RunStartupFlicker()
     {
         alphavision.RunStartupFlicker();
     }
 
-    [YarnCommand("trigger_beta_warning")]
+    [YarnCommand("triggerBetaWarning")]
     public void TriggerBetaWarning()
     {
         betaWarning.TriggerBetaWarning();
     }
 
-    [YarnCommand("set_feedback")]
+    [YarnCommand("setFeedback")]
     public void SetFeedback(string text)
     {
         feedback.SetFeedbackText(text);
     }
 
-    [YarnCommand("feedback_slide_out")]
+    [YarnCommand("feedbackSlideOut")]
     public void SlideFeedbackOut()
     {
         feedback.FeedbackSlideOut();
     }
 
-    [YarnCommand("increase_score")]
+    [YarnCommand("increaseScore")]
     public void IncreaseScore(int amount, string reason)
     {
         stats.IncreaseScore(amount, reason);
     }
 
-    [YarnCommand("decrease_score")]
+    [YarnCommand("decreaseScore")]
     public void DecreaseScore(int amount, string reason)
     {
         stats.DecreaseScore(amount, reason);
+    }
+
+    [YarnCommand("changeExpression")]
+    public void ChangeExpressionFromYarn(string expressionKey)
+    {
+        if (expression == null) {
+            Debug.LogWarning("GameManager: ExpressionController reference not set!");
+            return;
+        }
+
+        expression.ChangeExpression(expressionKey);
+    }
+
+    [YarnCommand("showItem")]
+    public void ShowItemCommand(string itemCode)
+    {
+        item.ShowItem(itemCode);
     }
 
     // --- Coroutines ---
