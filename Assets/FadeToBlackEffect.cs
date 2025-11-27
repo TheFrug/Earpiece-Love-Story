@@ -46,10 +46,13 @@ public class FadeToBlackEffect : MonoBehaviour
         yield return Fade(1f, 0f);
     }
 
+    public static bool IsFading { get; private set; }
+
     private IEnumerator Fade(float startAlpha, float endAlpha)
     {
-        fadeImage.gameObject.SetActive(true);
+        IsFading = true;
 
+        fadeImage.gameObject.SetActive(true);
         float t = 0f;
         Color c = fadeImage.color;
 
@@ -63,8 +66,10 @@ public class FadeToBlackEffect : MonoBehaviour
 
         fadeImage.color = new Color(c.r, c.g, c.b, endAlpha);
 
-        // Hide only if fully transparent
         if (endAlpha == 0f)
             fadeImage.gameObject.SetActive(false);
+
+        IsFading = false;
     }
+
 }
