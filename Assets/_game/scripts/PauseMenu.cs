@@ -34,6 +34,8 @@ public class PauseMenu : MonoBehaviour
         if (decoderOverlayImage == null) {
             Debug.LogWarning("[PauseMenu] decoderOverlayImage is null in inspector.");
         }
+
+        SetDecoderMode(false);
     }
 
     public void TogglePauseMenu()

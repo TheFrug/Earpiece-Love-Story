@@ -6,10 +6,11 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     public string firstLevel;
+    [SerializeField] private GameObject CreditsPanel;
 
     public void StartGame()
     {
-        SceneManager.LoadScene(firstLevel);
+        FadeToBlackEffect.Instance.FadeToScene(firstLevel);
     }
 
     public void OpenOptions()
@@ -20,6 +21,16 @@ public class MainMenu : MonoBehaviour
     public void CloseOptions()
     {
 
+    }
+
+    public void OpenCredits()
+    {
+        if (CreditsPanel != null) CreditsPanel.SetActive(true);
+    }
+
+    public void CloseCredits()
+    {
+        if (CreditsPanel != null) CreditsPanel.SetActive(false);
     }
 
     public void QuitGame()
