@@ -20,10 +20,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image? datePortrait;
     [SerializeField] private float dateFadeDuration = 1.5f; // seconds
 
-    [Header("Fade to Black")]
-    [SerializeField] private Image? fadeOverlay;
-    [SerializeField] private float fadeDuration = 1.5f;
-
     [Header("Controllers and Managers")]
     [SerializeField] private AlphavisionController alphavision = null!;
     [SerializeField] private BetaWarningController betaWarning = null!;
@@ -76,7 +72,10 @@ public class GameManager : MonoBehaviour
                                 
         if (Input.GetKeyDown(KeyCode.Alpha8))
             ShowItem("smartGlasses");
-                                
+
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+            FadeToBlack();
+
         if (Input.GetKeyDown(KeyCode.Z))
             ChangeExpression("Happy");
                                 
@@ -130,7 +129,7 @@ public class GameManager : MonoBehaviour
     [YarnCommand("fadeToBlack")]
     public void FadeToBlack()
     {
-        StartCoroutine(FadeScreenToBlack());
+        FadeToBlackEffect.Instance.FadeOut();
     }
 
     [YarnCommand("runStartupFlicker")]
@@ -212,31 +211,5 @@ public class GameManager : MonoBehaviour
 
         c.a = 1f;
         datePortrait.color = c;
-    }
-
-    private IEnumerator FadeScreenToBlack()
-    {
-        if (fadeOverlay == null)
-        {
-            Debug.LogWarning("Fade overlay not assigned!");
-            yield break;
-        }
-
-        fadeOverlay.gameObject.SetActive(true);
-        Color c = fadeOverlay.color;
-        c.a = 0f;
-        fadeOverlay.color = c;
-
-        float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime / fadeDuration;
-            c.a = Mathf.SmoothStep(0f, 1f, t);
-            fadeOverlay.color = c;
-            yield return null;
-        }
-
-        c.a = 1f;
-        fadeOverlay.color = c;
     }
 }
