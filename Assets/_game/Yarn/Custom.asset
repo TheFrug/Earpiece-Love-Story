@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: Custom
   m_EditorClassIdentifier: 
   BasicMarkers:
+  - Marker: A
+    CustomColor: 1
+    Color: {r: 0.92156863, g: 0.18431373, b: 0.023529412, a: 1}
+    Boldened: 0
+    Italicised: 0
+    Underlined: 0
+    Strikedthrough: 0
   - Marker: Pink
     CustomColor: 1
     Color: {r: 1, g: 0.43867922, b: 0.9895442, a: 0}
@@ -36,7 +43,7 @@ MonoBehaviour:
     Strikedthrough: 0
   - Marker: U
     CustomColor: 0
-    Color: {r: 0.45707497, g: 1, b: 0.43921566, a: 0}
+    Color: {r: 1, g: 1, b: 1, a: 0}
     Boldened: 0
     Italicised: 0
     Underlined: 1

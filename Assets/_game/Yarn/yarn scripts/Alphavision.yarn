@@ -1,0 +1,124 @@
+﻿title: Start
+position: -348,-432
+---
+<<declare $ToxicCounter = 0>>
+
+Claude: Oh God, she's already here. 
+Claude: Ok, ok, ok. I can do this.  Its just Mary! 
+Claude: Just Mary...
+Claude: ...
+Claude: I can't do this... Good thing I bought backup.
+<<showItem GameManager "smartGlasses">>
+<<runStartupFlicker GameManager>>
+<<setFeedback GameManager "ALPHAVISION SYSTEM ONLINE">>
+<<wait 1.5>>
+Claude: Woah... (I'm in the future!)
+<<setFeedback GameManager "CONNECTING TO ALPHA COACH">>
+<i>BZZZZZT</i>
+<<setFeedback GameManager "If you can read this, you are in good hands.">>
+ALPHA COACH: This is Alpha Coach 76, Codename: Blood Eagle reporting in for date coaching.
+ALPHA COACH: Are you user BMID 17391?
+Claude: <b>AGH!</b> I didn't realize this thing had a speaker. 
+Claude: Um, I can see the words "Beta Male" and the numbers you said in the bottom right.
+ALPHA COACH: Perfect. Lets get you laid, king.
+-> Hell yeah! Sex!
+    Claude: Hell yeah! Sex!
+    <<jump SexResponse1>>
+-> Uh, sure.
+    Claude: Uh, sure.
+    <<jump SexResponse2>>
+===
+
+title: SexResponse1
+position: 1, 1
+---
+ALPHA COACH: That's the spirit!
+<<increaseScore GameManager 5 "Strong Attitude">>
+CLAUDE: Ooh, points!
+<<jump Start2>>
+===
+
+title: SexResponse2
+position: 1, 1
+---
+ALPHA COACH: ...
+<<decreaseScore GameManager 5 "Weak Attitude">>
+CLAUDE: Aw, man... 
+<<jump Start2>>
+===
+
+title: Start2
+position: 1, 1
+---
+ALPHA COACH: The first step for any alpha: locating a female. Have you one in mind?
+CLAUDE: Actually, Mary is inside waiting for me.
+ALPHA COACH: Woah...
+<<setFeedback GameManager "!!!">>
+ALPHA COACH: So you've already landed a date... most Alphas don't get this far.
+ALPHA COACH: You may have potential, cub. Head inside.
+<<jump DateEnters>>
+===
+
+title: DateEnters
+position: 0, 0
+---
+<<setFeedback GameManager "Alpha Rule 81: Do not trip. Makes you look stupid">>
+ALPHA COACH: This is the girl? 
+CLAUDE: Hey, Mary! Sorry for the wait.
+<<setFeedback GameManager "SPEAKER SYSTEMS OFFLINE. STAND BY FOR FEEDBACK">>
+<<dateEnters GameManager>>
+MARY: You finally made it, Claude! Here I thought you got lost!
+<<setFeedback GameManager "Alpha Rule 3: If she gives sass, you must go tit-for-tat">>
+-> [Deliver sick comeback]
+    <<jump Comeback>>
+-> [Give lame excuse]
+    <<jump Excuse>>
+===
+
+title: Comeback
+position: 2, 2
+---
+CLAUDE: Yeah, well, it was hard to find you sitting in a booth cuz you're so short.
+<<increaseScore GameManager 10 "Negging">>
+<<setFeedback GameManager "Nice one, dude. You gotta knock her down a peg or two.">>
+MARY: Har har, dude. 
+MARY: Am I crazy, or did you not always wear glasses? 
+<<jump GlassesQuestion>>
+===
+
+title: Excuse
+position: 2, 2
+---
+CLAUDE: I, erm, had to grab my glasses.
+<<decreaseScore GameManager 10 "Lame">> 
+<<triggerBetaWarning GameManager>>
+MARY: No worries! Are those new?
+<<jump GlassesQuestion>>
+===
+
+title: GlassesQuestion
+position: 3, 3
+---
+<<setFeedback GameManager "Alpha Rule 6: When the truth is inconvenient, Gaslight">>
+-> [Answer Honestly]
+    <<jump AnswerHonestly>>
+-> [Lie About Glasses]
+    <<jump LieAboutGlasses>>
+===
+
+
+title: LieAboutGlasses
+position: 2, 2
+---
+CLAUDE: Um, yeah, you are crazy. I've worn these to work before!
+<<set $ToxicCounter = $ToxicCounter + 1>>
+<<increaseScore GameManager 15 "Successful Gaslight">>
+MARY: Really?
+===
+
+title: AnswerHonestly
+position: 2, 2
+---
+CLAUDE: Oh, I got these today, actually. Just trying something new.
+MARY: Oh
+===
