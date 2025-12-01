@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Yarn.Unity;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ItemPresenter item = null!;
 
     [Header("FX & End Game")]
-    [SerializeField] private GameObject? p_EndMenuPanel;
+    [SerializeField] private GameObject? endPanel;
     [SerializeField] private FadeToBlackEffect? fadeEffect;
 
     private void Awake()
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += HandleSceneLoaded;
@@ -74,17 +76,16 @@ public class GameManager : MonoBehaviour
 
         // ---- NEW ----
         fadeEffect = FindObjectOfType<FadeToBlackEffect>(true);
-        p_EndMenuPanel = GameObject.Find("p_EndMenuPanel");
+        endPanel = GameObject.Find("p_EndMenuPanel");
 
         // Hide end panel initially
-        if (p_EndMenuPanel != null)
-            p_EndMenuPanel.SetActive(false);
+        if (endPanel != null)
+            endPanel.SetActive(false);
 
         Debug.Log("[GameManager] References rebound:");
         Debug.Log($"  FadeEffect: {fadeEffect}");
-        Debug.Log($"  EndMenuPanel: {p_EndMenuPanel}");
+        Debug.Log($"  EndMenuPanel: {endPanel}");
     }
-
 
     private void Update()
     {
@@ -95,20 +96,9 @@ public class GameManager : MonoBehaviour
         false;      // Disabled in builds unless debugMode toggled
 #endif
 
-        // Optional override for builds
-        // Expose this in the inspector if you want:
-        // public bool debugMode = false;
-        // allowDebug |= debugMode;
-
         if (Input.GetKeyDown(KeyCode.R))
             ReloadScene();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-            QuitGame();
-
-        // -------------------------
-        // DEBUG CONTROLS (Editor only)
-        // -------------------------
         if (!allowDebug)
             return;
 
@@ -155,7 +145,6 @@ public class GameManager : MonoBehaviour
             ChangeExpression("Neutral");
     }
 
-
     private void ReloadScene()
     {
         StartCoroutine(ReloadAfterDelay(0.5f));
@@ -175,11 +164,11 @@ public class GameManager : MonoBehaviour
 
     private void QuitGame()
     {
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-    #else
+#else
         Application.Quit();
-    #endif
+#endif
     }
 
     // --- Yarn Commands ---
@@ -198,7 +187,13 @@ public class GameManager : MonoBehaviour
     [YarnCommand("fadeToBlack")]
     public void FadeToBlack()
     {
-        FadeToBlackEffect.Instance.FadeOut();
+        if (fadeEffect == null)
+            return;
+
+        // Register the helper to fade in the end panel after fade out
+        fadeEffect.SetOnFadeOutComplete(FadeEndPanelIn);
+
+        fadeEffect.FadeOut();
     }
 
     [YarnCommand("runStartupFlicker")]
@@ -252,7 +247,8 @@ public class GameManager : MonoBehaviour
     [YarnCommand("changeExpression")]
     public void ChangeExpression(string expressionKey)
     {
-        if (expression == null) {
+        if (expression == null)
+        {
             Debug.LogWarning("GameManager: ExpressionController reference not set!");
             return;
         }
@@ -267,7 +263,6 @@ public class GameManager : MonoBehaviour
     }
 
     // --- Coroutines ---
-
     private IEnumerator FadeInDatePortrait()
     {
         if (datePortrait == null)
@@ -316,5 +311,35 @@ public class GameManager : MonoBehaviour
         c.a = 0f;
         datePortrait.color = c;
         datePortrait.gameObject.SetActive(false);
+    }
+
+    // --- NEW: Fade End Panel Helper ---
+    private void FadeEndPanelIn()
+    {
+        if (endPanel == null)
+            return;
+
+        endPanel.SetActive(true);
+
+        CanvasGroup cg = endPanel.GetComponent<CanvasGroup>();
+        if (cg == null)
+        {
+            cg = endPanel.AddComponent<CanvasGroup>();
+            cg.alpha = 0f;
+        }
+
+        StartCoroutine(FadeCanvasGroup(cg, 0f, 1f, 1f)); // fade in over 1 second
+    }
+
+    private IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end, float duration)
+    {
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime / duration;
+            cg.alpha = Mathf.Lerp(start, end, t);
+            yield return null;
+        }
+        cg.alpha = end;
     }
 }

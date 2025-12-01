@@ -1,9 +1,7 @@
 #nullable enable
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using Yarn.Unity;
 
 public class FeedbackUIController : MonoBehaviour
 {
@@ -17,7 +15,10 @@ public class FeedbackUIController : MonoBehaviour
     [SerializeField] private float feedbackSlideDuration = 0.6f;
     [SerializeField] private Vector2 feedbackOnScreenPos = new Vector2(0, 0);
     [SerializeField] private Vector2 feedbackOffScreenPos = new Vector2(0, -250);
-    [SerializeField] private float autoHideDelay = 5f;
+
+    [Header("Manual/Startup Settings")]
+    [SerializeField] private bool manualMode = false; // if true, AnimateFeedbackIn doesn't auto-show
+    private bool feedbackLoadedIn = false; // tracks if panel has been initially loaded
 
     private RectTransform? feedbackRect;
     private Coroutine? feedbackRoutine;
@@ -28,7 +29,8 @@ public class FeedbackUIController : MonoBehaviour
         if (feedbackPanel != null)
             feedbackRect = feedbackPanel.GetComponent<RectTransform>();
 
-        if (feedbackPanelCanvasGroup != null)
+        // Only hide at start if it hasn't been loaded in yet
+        if (!feedbackLoadedIn && feedbackPanelCanvasGroup != null)
             feedbackPanelCanvasGroup.alpha = 0f;
     }
 
@@ -37,42 +39,39 @@ public class FeedbackUIController : MonoBehaviour
         if (feedbackRoutine != null)
             StopCoroutine(feedbackRoutine);
 
-        // If already visible, just update text without reanimation
-        if (isFeedbackVisible)
+        // Mark as loaded in immediately
+        if (!feedbackLoadedIn)
         {
-            feedbackTextShaded.text = newText;
-            feedbackTextNormal.text = newText;
+            feedbackLoadedIn = true;
+            // Make sure panel is visible immediately
+            if (feedbackPanelCanvasGroup != null)
+                feedbackPanelCanvasGroup.alpha = 1f;
         }
-        else
-        {
-            feedbackRoutine = StartCoroutine(AnimateFeedbackIn(newText));
-        }
-    }
 
-        public void FeedbackSlideOut()
-    {
-        if (feedbackRoutine != null)
-            StopCoroutine(feedbackRoutine);
-
-        feedbackRoutine = StartCoroutine(AnimateFeedbackOut());
-    }
-
-    // --- Animation Coroutines ---
-    private IEnumerator AnimateFeedbackIn(string newText)
-    {
-        if (feedbackRect == null || feedbackTextShaded == null)
-            yield break;
-
+        // Always update text
         feedbackTextShaded.text = newText;
         feedbackTextNormal.text = newText;
-        feedbackPanelCanvasGroup.alpha = 1f;
+
+        // Only animate in if it hasn't been animated yet
+        if (!isFeedbackVisible && !manualMode)
+        {
+            feedbackRoutine = StartCoroutine(AnimateFeedbackIn());
+        }
+    }
+
+    // Animation coroutine now does not touch alpha
+    private IEnumerator AnimateFeedbackIn()
+    {
+        if (feedbackRect == null)
+            yield break;
 
         float t = 0f;
+        Vector2 startPos = feedbackRect.anchoredPosition;
         while (t < 1f)
         {
             t += Time.deltaTime / feedbackSlideDuration;
             feedbackRect.anchoredPosition = Vector2.Lerp(
-                feedbackOffScreenPos,
+                startPos,
                 feedbackOnScreenPos,
                 Mathf.SmoothStep(0f, 1f, t)
             );
@@ -80,9 +79,16 @@ public class FeedbackUIController : MonoBehaviour
             yield return null;
         }
 
-        // Stay visible for a bit, then slide out
-        yield return new WaitForSeconds(autoHideDelay);
-        //FeedbackSlideOut();
+        feedbackRect.anchoredPosition = feedbackOnScreenPos;
+        isFeedbackVisible = true;
+    }
+
+    public void FeedbackSlideOut()
+    {
+        if (feedbackRoutine != null)
+            StopCoroutine(feedbackRoutine);
+
+        feedbackRoutine = StartCoroutine(AnimateFeedbackOut());
     }
 
     private IEnumerator AnimateFeedbackOut()

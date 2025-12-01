@@ -177,6 +177,11 @@ CLAUDE: Well, I know our work takes up a lot of your mental span, so Its to be e
     MARY: Oh yeah? I work in a lab several times a week and you think bartending is that hard for me?
     <<jump BadEnd>>
 <<endif>>
+<<if $ToxicCounter < 2>>
+    MARY: Woah, man. This is coming out of nowhere. Are you alright?
+    CLAUDE: Um... yeah. I'm sorry, that was uncalled for.
+    <<jump GoodEnd>>
+<<endif>>
 ===
 
 title: AnswerHonestly
