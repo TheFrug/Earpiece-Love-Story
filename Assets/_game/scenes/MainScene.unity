@@ -387,6 +387,46 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3158819626155018015, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: expressions.Array.data[0].key
+      value: Angry
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158819626155018015, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: expressions.Array.data[1].key
+      value: Confused
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158819626155018015, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: expressions.Array.data[2].key
+      value: Laughing
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158819626155018015, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: expressions.Array.data[3].key
+      value: Neutral
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158819626155018015, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: expressions.Array.data[4].key
+      value: BadEnd
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158819626155018015, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: expressions.Array.data[0].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5b195f69d7c2a9f438c8f463a342c7c4, type: 3}
+    - target: {fileID: 3158819626155018015, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: expressions.Array.data[1].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2018dbff182070e42a783cd12ec7a323, type: 3}
+    - target: {fileID: 3158819626155018015, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: expressions.Array.data[2].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 96cf4d96a94ca73418dedf8cf6c104ce, type: 3}
+    - target: {fileID: 3158819626155018015, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: expressions.Array.data[3].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3eff3c70c766439429061b0983fb6b17, type: 3}
+    - target: {fileID: 3158819626155018015, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: expressions.Array.data[4].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 02014bed7504d9f46899a376e6e943bb, type: 3}
     - target: {fileID: 3193313462577216264, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_Name
       value: Alphavision
