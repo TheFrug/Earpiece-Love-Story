@@ -28,6 +28,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ExpressionController expression = null!;
     [SerializeField] private ItemPresenter item = null!;
 
+    [Header("FX & End Game")]
+    [SerializeField] private GameObject? p_EndMenuPanel;
+    [SerializeField] private FadeToBlackEffect? fadeEffect;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -39,22 +43,81 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += HandleSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= HandleSceneLoaded;
+    }
+
+    private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "MainScene")
+            return;
+
+        RebindAllReferences();
+    }
+
+    private void RebindAllReferences()
+    {
+        // Find all controllers as before...
+        alphavision = FindObjectOfType<AlphavisionController>(true);
+        betaWarning = FindObjectOfType<BetaWarningController>(true);
+        feedback = FindObjectOfType<FeedbackUIController>(true);
+        stats = FindObjectOfType<StatManager>(true);
+        expression = FindObjectOfType<ExpressionController>(true);
+        item = FindObjectOfType<ItemPresenter>(true);
+        datePortrait = GameObject.Find("img_Riley")?.GetComponent<Image>();
+
+        // ---- NEW ----
+        fadeEffect = FindObjectOfType<FadeToBlackEffect>(true);
+        p_EndMenuPanel = GameObject.Find("p_EndMenuPanel");
+
+        // Hide end panel initially
+        if (p_EndMenuPanel != null)
+            p_EndMenuPanel.SetActive(false);
+
+        Debug.Log("[GameManager] References rebound:");
+        Debug.Log($"  FadeEffect: {fadeEffect}");
+        Debug.Log($"  EndMenuPanel: {p_EndMenuPanel}");
+    }
+
 
     private void Update()
     {
+        bool allowDebug =
+#if UNITY_EDITOR
+        true;       // Always allow in Editor
+#else
+        false;      // Disabled in builds unless debugMode toggled
+#endif
+
+        // Optional override for builds
+        // Expose this in the inspector if you want:
+        // public bool debugMode = false;
+        // allowDebug |= debugMode;
+
         if (Input.GetKeyDown(KeyCode.R))
             ReloadScene();
 
         if (Input.GetKeyDown(KeyCode.Escape))
             QuitGame();
 
-        // Debug Commands
+        // -------------------------
+        // DEBUG CONTROLS (Editor only)
+        // -------------------------
+        if (!allowDebug)
+            return;
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
             SetFeedback("Remember: you are in charge here, not her.");
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
             SlideFeedbackOut();
-                    
+
         if (Input.GetKeyDown(KeyCode.Alpha3))
             TriggerBetaWarning();
 
@@ -63,13 +126,13 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha5))
             IncreaseScore(10, "Dominance");
-        
+
         if (Input.GetKeyDown(KeyCode.Alpha6))
             DecreaseScore(10, "Never Show Weakness");
-                    
+
         if (Input.GetKeyDown(KeyCode.Alpha7))
             ShowItem("steak");
-                                
+
         if (Input.GetKeyDown(KeyCode.Alpha8))
             ShowItem("smartGlasses");
 
@@ -78,20 +141,20 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z))
             ChangeExpression("Happy");
-                                
+
         if (Input.GetKeyDown(KeyCode.X))
             ChangeExpression("Angry");
-                                            
+
         if (Input.GetKeyDown(KeyCode.C))
             ChangeExpression("Confused");
-                                            
+
         if (Input.GetKeyDown(KeyCode.V))
             ChangeExpression("Laughing");
-                                                        
+
         if (Input.GetKeyDown(KeyCode.B))
             ChangeExpression("Neutral");
-        
     }
+
 
     private void ReloadScene()
     {
@@ -126,6 +189,12 @@ public class GameManager : MonoBehaviour
         StartCoroutine(FadeInDatePortrait());
     }
 
+    [YarnCommand("dateExits")]
+    public void DateExits()
+    {
+        StartCoroutine(FadeOutDatePortrait());
+    }
+
     [YarnCommand("fadeToBlack")]
     public void FadeToBlack()
     {
@@ -136,6 +205,18 @@ public class GameManager : MonoBehaviour
     public void RunStartupFlicker()
     {
         alphavision.RunStartupFlicker();
+    }
+
+    [YarnCommand("throwAwayGlasses")]
+    public void ThrowAwayGlasses()
+    {
+        if (alphavision == null)
+        {
+            Debug.LogWarning("GameManager: No Alphavision reference!");
+            return;
+        }
+
+        alphavision.RunGlassesRemoval();
     }
 
     [YarnCommand("triggerBetaWarning")]
@@ -211,5 +292,29 @@ public class GameManager : MonoBehaviour
 
         c.a = 1f;
         datePortrait.color = c;
+    }
+
+    private IEnumerator FadeOutDatePortrait()
+    {
+        if (datePortrait == null)
+        {
+            Debug.LogWarning("Date portrait not assigned!");
+            yield break;
+        }
+
+        Color c = datePortrait.color;
+        float t = 0f;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / dateFadeDuration;
+            c.a = Mathf.SmoothStep(1f, 0f, t);
+            datePortrait.color = c;
+            yield return null;
+        }
+
+        c.a = 0f;
+        datePortrait.color = c;
+        datePortrait.gameObject.SetActive(false);
     }
 }

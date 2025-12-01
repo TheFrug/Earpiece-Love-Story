@@ -3,36 +3,38 @@ position: -348,-432
 ---
 <<declare $ToxicCounter = 0>>
 
-Claude: Oh God, she's already here. 
-Claude: Ok, ok, ok. I can do this.  Its just Mary! 
-Claude: Just Mary...
-Claude: ...
-Claude: I can't do this... Good thing I bought backup.
+CLAUDE: Oh God, she's already here. 
+CLAUDE: Ok, ok, ok. I can do this.  Its just Mary! 
+CLAUDE: Just Mary...
+CLAUDE: ...
+CLAUDE: I can't do this... Good thing I bought backup.
 <<showItem GameManager "smartGlasses">>
 <<runStartupFlicker GameManager>>
 <<setFeedback GameManager "ALPHAVISION SYSTEM ONLINE">>
 <<wait 1.5>>
-Claude: Woah... (I'm in the future!)
+CLAUDE: Woah... (I'm in the future!)
 <<setFeedback GameManager "CONNECTING TO ALPHA COACH">>
 <i>BZZZZZT</i>
 <<setFeedback GameManager "If you can read this, you are in good hands.">>
-ALPHA COACH: This is Alpha Coach 76, Codename: Blood Eagle reporting in for date coaching.
-ALPHA COACH: Are you user BMID 17391?
-Claude: <b>AGH!</b> I didn't realize this thing had a speaker. 
-Claude: Um, I can see the words "Beta Male" and the numbers you said in the bottom right.
-ALPHA COACH: Perfect. Lets get you laid, king.
+ALPHA COACH: <i>This is Alpha Coach 76, Codename: Blood Eagle reporting in for date coaching.</i>
+ALPHA COACH: <i>Are you user BMID 17391: CLAUDE?</i>
+CLAUDE: <b>AGH!</b> I didn't realize this thing had a speaker. 
+ALPHA COACH: <i>Hello? Beta-user, come in.</i>
+CLAUDE: And a microphone, too! (creepy).
+CLAUDE: Uh, yeah. I'm here.
+ALPHA COACH: <i>Perfect. Lets get you laid, king.</i>
 -> Hell yeah! Sex!
-    Claude: Hell yeah! Sex!
+    CLAUDE: Hell yeah! Sex!
     <<jump SexResponse1>>
 -> Uh, sure.
-    Claude: Uh, sure.
+    CLAUDE: Uh, sure.
     <<jump SexResponse2>>
 ===
 
 title: SexResponse1
 position: 1, 1
 ---
-ALPHA COACH: That's the spirit!
+ALPHA COACH: <i>That's the spirit!</i>
 <<increaseScore GameManager 5 "Strong Attitude">>
 CLAUDE: Ooh, points!
 <<jump Start2>>
@@ -41,7 +43,7 @@ CLAUDE: Ooh, points!
 title: SexResponse2
 position: 1, 1
 ---
-ALPHA COACH: ...
+ALPHA COACH: <i>...</i>
 <<decreaseScore GameManager 5 "Weak Attitude">>
 CLAUDE: Aw, man... 
 <<jump Start2>>
@@ -50,12 +52,12 @@ CLAUDE: Aw, man...
 title: Start2
 position: 1, 1
 ---
-ALPHA COACH: The first step for any alpha: locating a female. Have you one in mind?
+ALPHA COACH: <i>The first step for any alpha: locating a female. Do you have one in mind?</i>
 CLAUDE: Actually, Mary is inside waiting for me.
-ALPHA COACH: Woah...
+ALPHA COACH: <i>WOAH...</i>
 <<setFeedback GameManager "!!!">>
-ALPHA COACH: So you've already landed a date... most Alphas don't get this far.
-ALPHA COACH: You may have potential, cub. Head inside.
+ALPHA COACH: <i>So you've already landed a date... most Alphas don't get this far.</i>
+ALPHA COACH: <i>You may have potential, cub. Head inside.</i>
 <<jump DateEnters>>
 ===
 
@@ -63,11 +65,56 @@ title: DateEnters
 position: 0, 0
 ---
 <<setFeedback GameManager "Alpha Rule 81: Do not trip. Makes you look stupid">>
-ALPHA COACH: This is the girl? 
-CLAUDE: Hey, Mary! Sorry for the wait.
+ALPHA COACH: <i>Is this the girl? Lock in, bro.</i>
 <<setFeedback GameManager "SPEAKER SYSTEMS OFFLINE. STAND BY FOR FEEDBACK">>
 <<dateEnters GameManager>>
-MARY: You finally made it, Claude! Here I thought you got lost!
+CLAUDE: Hey, Mary! Wow, you look...
+<<setFeedback GameManager "Alpha Rule 2: The lower the self-esteem, the lower the fruit hangs.">>
+-> Amazing!
+    <<jump Greeting1>>
+-> Alright, I guess.
+    <<jump Greeting2>>
+===
+
+title: Greeting1
+position: 10, 10
+---
+CLAUDE: You look amazing! 
+<<decreaseScore GameManager 15 "Easy compliment">>
+MARY: Thank you, CLAUDE! You're looking sharper than my favorite chisel!
+CLAUDE: Wow, that is high praise coming from such a fossil freak!
+<<changeExpression GameManager "Laughing">>
+MARY: Hahahaha! 'Fossil freak'! What's that supposed to mean?
+CLAUDE: Er- I don't know! It could be your superhero name!
+<<changeExpression GameManager "Neutral">>
+<<setFeedback GameManager "We are off to a bad start. She is establishing dominance!">>
+MARY: Sounds more like a supervillain lackey's name. I like it, though. It suits me.
+<<jump DateEnters2>>
+===
+
+title: Greeting2
+position: 10, 10
+---
+CLAUDE: You look, alright, I guess.
+<<changeExpression GameManager "Confused">>
+MARY: Alright?
+<<increaseScore GameManager 15 "Deserved Compliment">>
+<<setFeedback GameManager "This is perfect. Push the envelope">>
+CLAUDE: Yeah! I like how you, uh, don't care about looking pretty. Its charming!
+<<set $ToxicCounter = $ToxicCounter + 1>>
+<<changeExpression GameManager "Angry">>
+MARY: Well in that case, you look totally average.
+<<setFeedback GameManager "See? She loves this!">>
+<<jump DateEnters2>>
+===
+
+
+
+title: DateEnters2
+position: 5, 5
+---
+<<changeExpression GameManager "Neutral">>
+MARY: You're a little late, you know? Here I thought you got lost!
 <<setFeedback GameManager "Alpha Rule 3: If she gives sass, you must go tit-for-tat">>
 -> [Deliver sick comeback]
     <<jump Comeback>>
@@ -81,8 +128,15 @@ position: 2, 2
 CLAUDE: Yeah, well, it was hard to find you sitting in a booth cuz you're so short.
 <<increaseScore GameManager 10 "Negging">>
 <<setFeedback GameManager "Nice one, dude. You gotta knock her down a peg or two.">>
-MARY: Har har, dude. 
-MARY: Am I crazy, or did you not always wear glasses? 
+<<changeExpression GameManager "Angry">>
+MARY: Har har, dude.
+MARY: Definitely haven't heard that one before.
+<<changeExpression GameManager "Neutral">>
+CLAUDE: Well, I'm here, aren't I?
+<<increaseScore GameManager 5 "Aloofness">>
+<<setFeedback GameManager "You're a natural alpha, my dude.">>
+MARY: I suppose you are.
+MARY: Hey, am I crazy, or did you not always wear glasses? 
 <<jump GlassesQuestion>>
 ===
 
@@ -92,7 +146,7 @@ position: 2, 2
 CLAUDE: I, erm, had to grab my glasses.
 <<decreaseScore GameManager 10 "Lame">> 
 <<triggerBetaWarning GameManager>>
-MARY: No worries! Are those new?
+MARY: Oh, no worries! Those are new, right? I'm not crazy? 
 <<jump GlassesQuestion>>
 ===
 
@@ -100,9 +154,9 @@ title: GlassesQuestion
 position: 3, 3
 ---
 <<setFeedback GameManager "Alpha Rule 6: When the truth is inconvenient, Gaslight">>
--> [Answer Honestly]
+-> [Answer honestly (but keep Alphavision a secret)]
     <<jump AnswerHonestly>>
--> [Lie About Glasses]
+-> [Lie about the glasses entirely]
     <<jump LieAboutGlasses>>
 ===
 
@@ -113,12 +167,133 @@ position: 2, 2
 CLAUDE: Um, yeah, you are crazy. I've worn these to work before!
 <<set $ToxicCounter = $ToxicCounter + 1>>
 <<increaseScore GameManager 15 "Successful Gaslight">>
-MARY: Really?
+<<changeExpression GameManager "Confused">>
+MARY: Really? I'm surprised I haven't noticed before.
+CLAUDE: Well, I know our work takes up a lot of your mental span, so Its to be expected you'd miss a few things.
+<<increaseScore GameManager 10 "Negging">>
+<<setFeedback GameManager "Great work. You've got her on the hook, now.">>
+<<if $ToxicCounter >= 2>>
+    <<changeExpression GameManager "Angry">>
+    MARY: Oh yeah? I work in a lab several times a week and you think bartending is that hard for me?
+    <<jump BadEnd>>
+<<endif>>
 ===
 
 title: AnswerHonestly
 position: 2, 2
 ---
 CLAUDE: Oh, I got these today, actually. Just trying something new.
-MARY: Oh
+<<setFeedback GameManager "If we get found out, I hope you have a good lawyer, bro.">>
+MARY: Neat! Do they come with a blue-light filter?
+CLAUDE: I think so? Something like that!
+<<decreaseScore GameManager 10 "Weak">>
+MARY: Are you gonna need them for work?
+CLAUDE: Uh... probably not. I think I can see ok without them.
+<<setFeedback GameManager "Alpha Rule 12: Keep her guessing. Confusion builds control.">>
+MARY: Well, you look good in them. Kinda different, but in a good way. Points for experimentation!
+<<decreaseScore GameManager 10 "Sincerity Detected">>
+<<setFeedback GameManager "Don't accept her points, they mean nothing. REASSERT FRAME CONTROL.">>
+-> [Do what Coach says] 
+    <<jump Subordinate>>
+-> [Ignore Coach]
+    <<jump Insubordinate>>
+===
+
+title: Subordinate
+position: 10, 10
+---
+<<increaseScore GameManager 15 "Submission to Coach">>
+CLAUDE: Yeah, well, I didn't wear them for you. 
+<<changeExpression GameManager "Confused">>
+MARY: Oh yeah? I figured...
+CLAUDE: Yeah, I'm independent like that. A real lone wolf type...
+<<set $ToxicCounter += 1>>
+<<setFeedback GameManager "Dude, you sound SO COOL right now.">>
+MARY: Um, ok then.
+<<changeExpression GameManager "Angry">>
+<<if $ToxicCounter >= 2>>
+    <<jump BadEnd>>
+<<endif>>
+<<jump GoodEnd>> 
+===
+
+title: Insubordinate
+position: 10, 10
+---
+CLAUDE: Thanks, Mary! 
+<<jump GoodEnd>>
+===
+
+title: GoodEnd
+position: 52, 12
+---
+<<setFeedback GameManager "WARNING. INSUBORDINATE USER. SPEAKER ACTIVATED">>
+<i>*BZZZZZT*</i>
+ALPHA COACH: <i>Hey, what the fuck are you doing? Are you trying <b>not</b> to get laid?</i>
+
+<<changeExpression GameManager "Confused">>
+MARY: Claude? You okay?
+
+CLAUDE: ...Yeah. I just— 
+CLAUDE: These glasses kinda... suck, actually.
+
+<<setFeedback GameManager "NEGATIVE. REVERT. REVERT. REVERT.">>
+ALPHA COACH: <i>Absolutely not. Stick to my directions. You are tanking your Date Score.</i>
+
+CLAUDE: If I'm, being honest, they're making me kind of uncomfortable.
+
+<<setFeedback GameManager "USER NONCOMPLIANCE DETECTED">>
+ALPHA COACH: <i>Uncomfortable? They are enhancing your value. Put them back on. Right now. That’s an order.</i>
+
+<<throwAwayGlasses GameManager>>
+
+ALPHA COACH: <i>HEY—HEY—WHAT ARE YOU DOING? I AM NOT FINISHED UPGRADING YOU. YOU CAN’T JUST—</i>
+
+<<setFeedback GameManager "CONNECTION LOST">>
+
+MARY: What's up Claude?
+<<changeExpression GameManager "Neutral">>
+CLAUDE: Turns out those smart glasses had some annoying bugs in them.
+CLAUDE: I think I'm better off without them.
+
+MARY: ...
+MARY: Well, I'm glad you were honest! Sucks about the glasses, though.
+
+CLAUDE: Doesn't suck too bad. I'm here with you!
+<<changeExpression GameManager "Laughing">>
+MARY: Aw, Claude, you charmer!
+MARY: Come check out the menu so we can order! I'm going to get their famous "big-ass burger"!
+CLAUDE: Sounds awesome!
+
+<<fadeToBlack GameManager>>
+=== 
+
+
+title: BadEnd
+position: 50, 50
+---
+MARY: You know what, Claude? I think I'm gonna save us both some time.
+<<changeExpression GameManager "BadEnd">>
+CLAUDE: Wait- what?
+MARY: I don't know if you've been having a bad day or what, but this is clearly not what I was hoping for.
+-> [Double Down]
+    CLAUDE: What, are you sensitive or something? We were just starting to have fun.
+    MARY: No, Claude, you're acting like a dickhead, like...
+    MARY: Like the boys in my lab.
+    <<setFeedback GameManager "This is all according to plan, trust me.">>
+    MARY: Goodbye, Claude. I'll see you on Saturday.
+    <<dateExits GameManager>>
+    <<setFeedback GameManager "Don't worry, king. Every Alpha has been through something like this. She'll be back.">>
+    CLAUDE: Mary... Oh, damn it.
+    <<fadeToBlack GameManager>>
+-> [Apologize]
+    CLAUDE: I'm sorry, Mary. I just... its the glasses.
+        <<setFeedback GameManager "What the hell are you apologizing for?">>
+    MARY: ...
+    MARY: So your glasses made you act like an asshole?
+    MARY: I hope you have a better excuse than that when I see you on Saturday.
+        <<setFeedback GameManager "See? She wants to see you again!">>
+    <<dateExits GameManager>>
+    CLAUDE: ...
+    <<fadeToBlack GameManager>>
 ===

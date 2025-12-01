@@ -48,6 +48,12 @@ public class AlphavisionController : MonoBehaviour
         StartCoroutine(StartupFlicker());
     }
 
+    public void RunGlassesRemoval()
+    {
+        StartCoroutine(RemoveGlassesRoutine());
+    }
+
+
     // --- Main Coroutine ---
 
     private IEnumerator StartupFlicker()
@@ -96,5 +102,47 @@ public class AlphavisionController : MonoBehaviour
             scorePanelCanvasGroup.alpha = visible ? 1 : 0;
         if (confidencePanelCanvasGroup != null)
             confidencePanelCanvasGroup.alpha = visible ? 1 : 0;
+    }
+
+    private IEnumerator RemoveGlassesRoutine()
+    {
+        // Flicker panels OFF (reverse of turning them on)
+        yield return StartCoroutine(FlickerPanelOff(scorePanelCanvasGroup));
+        yield return StartCoroutine(FlickerPanelOff(confidencePanelCanvasGroup));
+
+        // Slide visor upward, offscreen (reverse of StartupFlicker)
+        if (alphavisionRoot != null)
+        {
+            float t = 0f;
+            Vector2 start = visorEndPos;
+            Vector2 end = visorStartPos;
+
+            while (t < 1f)
+            {
+                t += Time.deltaTime / visorSlideDuration;
+                float eased = Mathf.SmoothStep(0, 1, t);
+                alphavisionRoot.anchoredPosition = Vector2.Lerp(start, end, eased);
+                yield return null;
+            }
+
+            // Fully hide once offscreen
+            alphavisionRoot.gameObject.SetActive(false);
+        }
+    }
+
+    private IEnumerator FlickerPanelOff(CanvasGroup? panel)
+    {
+        if (panel == null)
+            yield break;
+
+        for (int i = 0; i < flashCount; i++)
+        {
+            panel.alpha = 0;
+            yield return new WaitForSeconds(flashDuration);
+            panel.alpha = 1;
+            yield return new WaitForSeconds(flashDuration);
+        }
+
+        panel.alpha = 0;
     }
 }
