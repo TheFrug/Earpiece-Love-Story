@@ -10,7 +10,6 @@ CLAUDE: ...
 CLAUDE: I can't do this... Good thing I bought backup.
 <<showItem GameManager "smartGlasses">>
 <<runStartupFlicker GameManager>>
-<<setFeedback GameManager "ALPHAVISION SYSTEM ONLINE">>
 <<wait 1.5>>
 CLAUDE: Woah... (I'm in the future!)
 <<setFeedback GameManager "CONNECTING TO ALPHA COACH">>

@@ -30,7 +30,7 @@ public class FeedbackUIController : MonoBehaviour
             feedbackRect = feedbackPanel.GetComponent<RectTransform>();
 
         // Only hide at start if it hasn't been loaded in yet
-        if (!feedbackLoadedIn && feedbackPanelCanvasGroup != null)
+        if (!feedbackLoadedIn)
             feedbackPanelCanvasGroup.alpha = 0f;
     }
 

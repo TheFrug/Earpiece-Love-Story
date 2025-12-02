@@ -96,7 +96,7 @@ public class AlphavisionController : MonoBehaviour
 
         for (int i = 0; i < flashCount; i++)
         {
-            panel.alpha = 1;
+            panel.alpha = 0.8f;
             yield return new WaitForSeconds(flashDuration);
             panel.alpha = 0;
             yield return new WaitForSeconds(flashDuration);
