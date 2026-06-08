@@ -10,6 +10,14 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
+        print("Starting");
+
+        if (FadeToBlackEffect.Instance == null)
+        {
+            Debug.LogError("FadeToBlackEffect.Instance is NULL!");
+            return;
+        }
+
         FadeToBlackEffect.Instance.FadeToScene(firstLevel);
     }
 
