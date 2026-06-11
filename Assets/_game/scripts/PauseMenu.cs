@@ -60,11 +60,11 @@ public class PauseMenu : MonoBehaviour
             pauseMenuPanel = GameObject.Find("p_PauseMenuPanel");
 
         // If we found a panel, temporarily ensure it's active so child objects exist to find
-        bool weActivatedPanel = false;
+        //bool weActivatedPanel = false;
         if (pauseMenuPanel != null && !pauseMenuPanel.activeSelf)
         {
             pauseMenuPanel.SetActive(true);
-            weActivatedPanel = true;
+            //weActivatedPanel = true;
         }
 
         // Find other objects by name if not assigned in inspector
