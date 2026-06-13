@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject? endPanel;
     [SerializeField] private FadeToBlackEffect? fadeEffect;
 
+    [Header("Yarn Configuration")]
+    [SerializeField] private DialogueRunner? dialogueRunner;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -73,8 +76,7 @@ public class GameManager : MonoBehaviour
         expression = FindObjectOfType<ExpressionController>(true);
         item = FindObjectOfType<ItemPresenter>(true);
         datePortrait = GameObject.Find("img_Riley")?.GetComponent<Image>();
-
-        // ---- NEW ----
+        dialogueRunner = FindObjectOfType<DialogueRunner>(true);
         fadeEffect = FindObjectOfType<FadeToBlackEffect>(true);
         endPanel = GameObject.Find("p_EndMenuPanel");
 
@@ -82,9 +84,9 @@ public class GameManager : MonoBehaviour
         if (endPanel != null)
             endPanel.SetActive(false);
 
-        Debug.Log("[GameManager] References rebound:");
-        Debug.Log($"  FadeEffect: {fadeEffect}");
-        Debug.Log($"  EndMenuPanel: {endPanel}");
+        //Debug.Log("[GameManager] References rebound:");
+        //Debug.Log($"  FadeEffect: {fadeEffect}");
+        //Debug.Log($"  EndMenuPanel: {endPanel}");
     }
 
     private void Update()
@@ -211,7 +213,17 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        alphavision.RunGlassesRemoval();
+        alphavision.RunGlassesRemoval(); // Actually takes them off UI
+
+        if (dialogueRunner != null && dialogueRunner.VariableStorage != null)
+        {
+            dialogueRunner.VariableStorage.SetValue("$wearingGlasses", false); // Sets variable
+            Debug.Log("[GameManager] Successfully updated Yarn variable $wearingGlasses to false.");
+        }
+        else
+        {
+            Debug.LogWarning("[GameManager] Failed to find DialogueRunner or VariableStorage to set $wearingGlasses!");
+        }
     }
 
     [YarnCommand("triggerBetaWarning")]
