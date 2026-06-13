@@ -24,7 +24,7 @@ ALPHA COACH: <i>Hello? Beta-user, come in.</i>
 CLAUDE: And a microphone, too! (creepy).
 CLAUDE: Uh, yeah. I'm here.
 ALPHA COACH: <i>Perfect. Let's get you laid, king.</i>
-<<jump Test>>
+//<<jump Test>>
 -> Hell yeah! Sex!
     CLAUDE: Hell yeah! Sex!
     <<jump SexResponse1>>
