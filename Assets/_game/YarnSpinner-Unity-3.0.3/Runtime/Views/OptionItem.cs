@@ -32,6 +32,15 @@ namespace Yarn.Unity
         [Group("Appearance"), SerializeField] InternalAppearance selected;
         [Group("Appearance"), SerializeField] InternalAppearance disabled;
 
+        // --- NEW: Alpha Coach Styling ---
+        [Group("Alpha Appearance"), SerializeField] InternalAppearance alphaNormal;
+        [Group("Alpha Appearance"), SerializeField] InternalAppearance alphaSelected;
+        [Group("Alpha Appearance"), SerializeField, Tooltip("Optional: A child GameObject containing a neon border or glitch effect that only turns on for Alpha options.")]
+        GameObject? alphaBorderOverlay;
+
+        private bool isAlphaStyle = false;
+        // --------------------------------
+
         [Group("Appearance"), SerializeField] bool disabledStrikeThrough = true;
 
         public YarnTaskCompletionSource<DialogueOption?>? OnOptionSelected;
@@ -57,6 +66,28 @@ namespace Yarn.Unity
 
                 hasSubmittedOptionSelection = false;
 
+                // --- NEW: Check Yarn 3.0 Metadata for the Alpha tag ---
+                isAlphaStyle = false;
+                if (value.Line.Metadata != null)
+                {
+                    foreach (var tag in value.Line.Metadata)
+                    {
+                        // StringComparison.OrdinalIgnoreCase makes it safe even if you type #alphaoption or #AlphaOption
+                        if (tag.Trim().Equals("AlphaOption", System.StringComparison.OrdinalIgnoreCase))
+                        {
+                            isAlphaStyle = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Toggle the custom border graphic if you assigned one in the inspector
+                if (alphaBorderOverlay != null)
+                {
+                    alphaBorderOverlay.SetActive(isAlphaStyle);
+                }
+                // ------------------------------------------------------
+
                 // When we're given an Option, use its text and update our
                 // interactibility.
                 string line = value.Line.TextWithoutCharacterName.Text;
@@ -74,8 +105,8 @@ namespace Yarn.Unity
                 text.text = line;
                 interactable = value.IsAvailable;
 
-                // we want to apply the default styling to the option item when they are given an option
-                ApplyStyle(normal);
+                // Apply the correct styling (Alpha vs Normal)
+                ApplyStyle(isAlphaStyle ? alphaNormal : normal);
             }
         }
 
@@ -116,14 +147,16 @@ namespace Yarn.Unity
         {
             base.OnSelect(eventData);
 
-            ApplyStyle(selected);
+            // Use alpha styling if tagged!
+            ApplyStyle(isAlphaStyle ? alphaSelected : selected);
         }
 
         public override void OnDeselect(BaseEventData eventData)
         {
             base.OnDeselect(eventData);
 
-            ApplyStyle(normal);
+            // Use alpha styling if tagged!
+            ApplyStyle(isAlphaStyle ? alphaNormal : normal);
         }
 
         new public bool IsHighlighted
@@ -134,7 +167,6 @@ namespace Yarn.Unity
             }
         }
 
-        // If we receive a submit or click event, invoke our "we just selected this option" handler.
         public void OnSubmit(BaseEventData eventData)
         {
             InvokeOptionSelected();
@@ -142,16 +174,11 @@ namespace Yarn.Unity
 
         public void InvokeOptionSelected()
         {
-            // turns out that Selectable subclasses aren't intrinsically interactive/non-interactive
-            // based on their canvasgroup, you still need to check at the moment of interaction
             if (!IsInteractable())
             {
                 return;
             }
 
-            // We only want to invoke this once, because it's an error to
-            // submit an option when the Dialogue Runner isn't expecting it. To
-            // prevent this, we'll only invoke this if the flag hasn't been cleared already.
             if (hasSubmittedOptionSelection == false && !completionToken.IsCancellationRequested)
             {
                 hasSubmittedOptionSelection = true;
@@ -164,8 +191,6 @@ namespace Yarn.Unity
             InvokeOptionSelected();
         }
 
-        // If we mouse-over, we're telling the UI system that this element is
-        // the currently 'selected' (i.e. focused) element. 
         public override void OnPointerEnter(PointerEventData eventData)
         {
             base.Select();

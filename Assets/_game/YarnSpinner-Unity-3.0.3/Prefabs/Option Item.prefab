@@ -339,4 +339,11 @@ MonoBehaviour:
   disabled:
     sprite: {fileID: 0}
     colour: {r: 0.5, g: 0.5, b: 0.5, a: 0.5019608}
+  alphaNormal:
+    sprite: {fileID: 0}
+    colour: {r: 0.6415094, g: 0.009077947, b: 0.009077947, a: 1}
+  alphaSelected:
+    sprite: {fileID: 21300000, guid: 997a4571b48144fd7be9c547b769c11d, type: 3}
+    colour: {r: 0.8962264, g: 0.1986917, b: 0.1986917, a: 1}
+  alphaBorderOverlay: {fileID: 0}
   disabledStrikeThrough: 1
