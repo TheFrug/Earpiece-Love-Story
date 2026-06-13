@@ -2,16 +2,18 @@
 position: -348,-432
 ---
 <<declare $ToxicCounter = 0>>
+<<declare $wearingGlasses = false>> // Tracking variable
 
 CLAUDE: Oh God, she's already here. 
-CLAUDE: Ok, ok, ok. I can do this.  Its just Mary! 
+CLAUDE: Ok, ok, ok. I can do this.  It's just Mary! 
 CLAUDE: Just Mary...
 CLAUDE: ...
-CLAUDE: I can't do this... Good thing I bought backup.
+CLAUDE: I can't do this... Good thing I <i>bought</i> backup.
 <<showItem GameManager "smartGlasses">>
 <<runStartupFlicker GameManager>>
+<<set $wearingGlasses to true>>
 <<wait 1.5>>
-CLAUDE: Woah... (I'm in the future!)
+CLAUDE: Woah...
 <<setFeedback GameManager "CONNECTING TO ALPHA COACH">>
 <i>BZZZZZT</i>
 <<setFeedback GameManager "If you can read this, you are in good hands.">>
@@ -21,13 +23,24 @@ CLAUDE: <b>AGH!</b> I didn't realize this thing had a speaker.
 ALPHA COACH: <i>Hello? Beta-user, come in.</i>
 CLAUDE: And a microphone, too! (creepy).
 CLAUDE: Uh, yeah. I'm here.
-ALPHA COACH: <i>Perfect. Lets get you laid, king.</i>
+ALPHA COACH: <i>Perfect. Let's get you laid, king.</i>
+<<jump Test>>
 -> Hell yeah! Sex!
     CLAUDE: Hell yeah! Sex!
     <<jump SexResponse1>>
 -> Uh, sure.
     CLAUDE: Uh, sure.
     <<jump SexResponse2>>
+===
+
+title: Test
+---
+-> (Take off glasses)
+    <<set $wearingGlasses to false>>
+-> (keep them on)
+Claude: What do I think...?
+-> Want to date <<if $wearingGlasses == true>>
+-> Want to kiss
 ===
 
 title: SexResponse1
