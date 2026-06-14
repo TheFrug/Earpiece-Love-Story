@@ -272,7 +272,7 @@ namespace Yarn.Unity
             // NEW: Swap the text box background based on who is speaking!
             if (TryGetComponent<DialogueBoxSwapper>(out var swapper))
             {
-                swapper.SwapSprite(line.CharacterName);
+                swapper.SwapAppearance(line.CharacterName);
             }
 
             MarkupParseResult text;

@@ -25,7 +25,7 @@ CLAUDE: And a microphone, too! (creepy).
 CLAUDE: Uh, yeah. I'm here.
 ALPHA COACH: <i>Perfect. Let's get you laid, king.</i>
 //<<jump Test>>
--> Hell yeah! Sex!
+-> Hell yeah! Sex! #AlphaOption
     CLAUDE: Hell yeah! Sex!
     <<jump SexResponse1>>
 -> Uh, sure.
@@ -84,7 +84,7 @@ CLAUDE: Hey, Mary! Wow, you look...
 <<setFeedback GameManager "Alpha Rule 2: The lower the self-esteem, the lower the fruit hangs.">>
 -> Amazing!
     <<jump Greeting1>>
--> Alright, I guess.
+-> Alright, I guess. #AlphaOption
     <<jump Greeting2>>
 ===
 
@@ -128,7 +128,7 @@ position: 5, 5
 <<changeExpression GameManager "Neutral">>
 MARY: You're a little late, you know? Here I thought you got lost!
 <<setFeedback GameManager "Alpha Rule 3: If she gives sass, you must go tit-for-tat">>
--> [Deliver sick comeback]
+-> [Deliver sick comeback] #AlphaOption
     <<jump Comeback>>
 -> [Give lame excuse]
     <<jump Excuse>>
@@ -168,7 +168,7 @@ position: 3, 3
 <<setFeedback GameManager "Alpha Rule 6: When the truth is inconvenient, Gaslight">>
 -> [Answer honestly (but keep Alphavision a secret)]
     <<jump AnswerHonestly>>
--> [Lie about the glasses entirely]
+-> [Lie about the glasses entirely] #AlphaOption
     <<jump LieAboutGlasses>>
 ===
 
@@ -210,7 +210,7 @@ CLAUDE: Uh... probably not. I think I can see ok without them.
 MARY: Well, you look good in them. Kinda different, but in a good way. Points for experimentation!
 <<decreaseScore GameManager 10 "Sincerity Detected">>
 <<setFeedback GameManager "Don't accept her points, they mean nothing. REASSERT FRAME CONTROL.">>
--> [Do what Coach says] 
+-> [Do what Coach says]  #AlphaOption
     <<jump Subordinate>>
 -> [Ignore Coach]
     <<jump Insubordinate>>
@@ -247,41 +247,30 @@ position: 52, 12
 <<setFeedback GameManager "WARNING. INSUBORDINATE USER. SPEAKER ACTIVATED">>
 <i>*BZZZZZT*</i>
 ALPHA COACH: <i>Hey, what the fuck are you doing? Are you trying <b>not</b> to get laid?</i>
-
 <<changeExpression GameManager "Confused">>
 MARY: Claude? You okay?
-
 CLAUDE: ...Yeah. I just— 
 CLAUDE: These glasses kinda... suck, actually.
-
 <<setFeedback GameManager "NEGATIVE. REVERT. REVERT. REVERT.">>
 ALPHA COACH: <i>Absolutely not. Stick to my directions. You are tanking your Date Score.</i>
-
 CLAUDE: If I'm, being honest, they're making me kind of uncomfortable.
-
 <<setFeedback GameManager "USER NONCOMPLIANCE DETECTED">>
 ALPHA COACH: <i>Uncomfortable? They are enhancing your value. Put them back on. Right now. That’s an order.</i>
-
 <<throwAwayGlasses GameManager>>
-
-ALPHA COACH: <i>HEY—HEY—WHAT ARE YOU DOING? I AM NOT FINISHED UPGRADING YOU. YOU CAN’T JUST—</i>
-
+ALPHA COACH: <i>IF YOU THROW ME AWAY, YOU'LL ALWAYS BE A SOYBOY FAGGOT!</i>
 <<setFeedback GameManager "CONNECTION LOST">>
 
 MARY: What's up Claude?
 <<changeExpression GameManager "Neutral">>
 CLAUDE: Turns out those smart glasses had some annoying bugs in them.
 CLAUDE: I think I'm better off without them.
-
 MARY: ...
 MARY: Well, I'm glad you were honest! Sucks about the glasses, though.
-
 CLAUDE: Doesn't suck too bad. I'm here with you!
 <<changeExpression GameManager "Laughing">>
 MARY: Aw, Claude, you charmer!
 MARY: Come check out the menu so we can order! I'm going to get their famous "big-ass burger"!
 CLAUDE: Sounds awesome!
-
 <<fadeToBlack GameManager>>
 === 
 
@@ -293,7 +282,7 @@ MARY: You know what, Claude? I think I'm gonna save us both some time.
 <<changeExpression GameManager "BadEnd">>
 CLAUDE: Wait- what?
 MARY: I don't know if you've been having a bad day or what, but this is clearly not what I was hoping for.
--> [Double Down]
+-> [Double Down] #AlphaOption
     CLAUDE: What, are you sensitive or something? We were just starting to have fun.
     MARY: No, Claude, you're acting like a dickhead, like...
     MARY: Like the boys in my lab.
