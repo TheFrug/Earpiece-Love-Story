@@ -461,6 +461,32 @@ MonoBehaviour:
     textFont: {fileID: 0}
     usesUniqueTextColor: 0
     textColor: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &409880802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 74697914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8ab851e3c9ecaa48947182bd29ab9f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minPitch: 0.8
+  maxPitch: 1.2
+  volume: 0.7
+  stopAudioSource: 0
+  soundCooldown: 0.02
+  nameTextComponent: {fileID: 1782057540}
+  characterSounds:
+  - characterName: Claude
+    soundKey: Claude
+  - characterName: Mary
+    soundKey: Mary
+  - characterName: Alpha Coach
+    soundKey: Alpha
+  defaultSound: TypewriterClick
 --- !u!114 &417621812 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3541508983158213390, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
@@ -982,6 +1008,14 @@ PrefabInstance:
       propertyPath: characterNameContainer
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2958262985454349548, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: eventHandlers.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2958262985454349548, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: eventHandlers.Array.data[1]
+      value: 
+      objectReference: {fileID: 409880802}
     - target: {fileID: 2958262986393358531, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -1277,6 +1311,14 @@ PrefabInstance:
     - target: {fileID: 4188510617801867817, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -60
+      objectReference: {fileID: 0}
+    - target: {fileID: 4377511218986686115, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4377511218986686115, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4654029789615141962, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_Name
@@ -1901,7 +1943,11 @@ PrefabInstance:
     - target: {fileID: 8336841859189707139, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: a9b4ef7e18357b944947ec7ec2e5be53, type: 3}
+      objectReference: {fileID: 21300000, guid: 5956eeea2e7bf4b4da3c7ea706e9d736, type: 3}
+    - target: {fileID: 8336841859189707139, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: m_Color.a
+      value: 0.81960785
+      objectReference: {fileID: 0}
     - target: {fileID: 8353633523156911317, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_text
       value: ALPHAVISION SYSTEMS ONLINE
@@ -2092,6 +2138,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2958262985454349538, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       insertIndex: -1
       addedObject: {fileID: 409880801}
+    - targetCorrespondingSourceObject: {fileID: 2958262985454349538, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 409880802}
     - targetCorrespondingSourceObject: {fileID: 2958262987206614836, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1782057539}
@@ -3059,6 +3108,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1562502646}
   m_CullTransparentMesh: 1
+--- !u!1 &1740385513
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1740385514}
+  - component: {fileID: 1740385515}
+  m_Layer: 0
+  m_Name: TypeWriterSoundHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1740385514
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740385513}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1740385515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740385513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8ab851e3c9ecaa48947182bd29ab9f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minPitch: 0.8
+  maxPitch: 1.2
+  volume: 0.7
+  stopAudioSource: 0
+  soundCooldown: 0.02
+  nameTextComponent: {fileID: 1782057540}
+  characterSounds:
+  - characterName: CLAUDE
+    soundKey: TypeClaude
+  - characterName: MARY
+    soundKey: TypeMary
+  - characterName: ALPHA COACH
+    soundKey: TypeAlpha
+  defaultSound: TypewriterClick
 --- !u!224 &1748723301 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7684516806880256242, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
@@ -3672,3 +3779,4 @@ SceneRoots:
   - {fileID: 2010271028}
   - {fileID: 2035464727}
   - {fileID: 581130451}
+  - {fileID: 1740385514}

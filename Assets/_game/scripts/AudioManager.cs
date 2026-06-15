@@ -44,17 +44,18 @@ public class AudioManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return; // <-- You must return here so the duplicate stops executing!
         }
+        PlayAmbience("LoopMusic");
     }
 
-    // 1. Play a single sound from the library (Stacks automatically using PlayOneShot)
-    public void PlaySound(string clipName, float volume = 1f)
+    // Added an optional 'pitch' parameter defaulting to 1f
+    public void PlaySound(string clipName, float volume = 1f, float pitch = 1f)
     {
         AudioClip clip = GetClip(clipName);
         if (clip != null)
         {
-            // Reset pitch to normal in case a random sound modified it
-            EffectsSource.pitch = 1f;
+            EffectsSource.pitch = pitch;
             EffectsSource.PlayOneShot(clip, volume);
         }
         else
@@ -105,8 +106,7 @@ public class AudioManager : MonoBehaviour
         if (AmbienceSource.isPlaying) AmbienceSource.Stop();
     }
 
-    // Internal helper to search the standard library
-    private AudioClip GetClip(string targetName)
+    public AudioClip GetClip(string targetName)
     {
         foreach (var item in audioLibrary)
         {
@@ -133,6 +133,7 @@ public class AudioManager : MonoBehaviour
 
     private IEnumerator FadeAmbienceRoutine(AudioClip newAmbience, float duration)
     {
+        float targetVolume = 1f; // Set this to your desired max volume
         float startVolume = AmbienceSource.volume;
 
         // 1. Fade out current
@@ -150,11 +151,11 @@ public class AudioManager : MonoBehaviour
         // 3. Fade in new
         for (float t = 0; t < duration; t += Time.deltaTime)
         {
-            AmbienceSource.volume = Mathf.Lerp(0, startVolume, t / duration);
+            AmbienceSource.volume = Mathf.Lerp(0, targetVolume, t / duration);
             yield return null;
         }
 
-        AmbienceSource.volume = startVolume;
+        AmbienceSource.volume = targetVolume;
     }
 
     // Internal helper to search the random library
