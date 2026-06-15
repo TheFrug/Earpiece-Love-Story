@@ -115,6 +115,9 @@ public class PauseMenu : MonoBehaviour
         {
             decoderToggle.onValueChanged.RemoveAllListeners();
             decoderToggle.onValueChanged.AddListener(SetDecoderMode);
+
+            // FIX: Force the UI Toggle toggle state to start unchecked
+            decoderToggle.isOn = false;
         }
         else Debug.LogWarning("[PauseMenu] decoderToggle not found.");
 
@@ -123,8 +126,8 @@ public class PauseMenu : MonoBehaviour
         if (decoderTMP == null) Debug.LogWarning("[PauseMenu] decoderTMP not found.");
         if (normalTMP == null) Debug.LogWarning("[PauseMenu] normalTMP not found.");
 
-        // Initialize defaults
-        SetDecoderMode(true);
+        // FIX: Initialize default state to false (unchecked)
+        SetDecoderMode(false);
 
         // Hide panel again if we temporarily showed it
         if (pauseMenuPanel != null)

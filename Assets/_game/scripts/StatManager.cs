@@ -20,11 +20,12 @@ public class StatManager : MonoBehaviour
     [SerializeField] private TMP_Text scoreChangeText;
 
     [Header("Score Colors (Low → High)")]
-    [SerializeField] private Color scoreColor0to59 = new Color(0.8f, 0.2f, 0.2f);
-    [SerializeField] private Color scoreColor60to69 = new Color(1f, 0.5f, 0f);
-    [SerializeField] private Color scoreColor70to79 = new Color(1f, 0.8f, 0f);
-    [SerializeField] private Color scoreColor80to89 = new Color(0.85f, 1f, 0.4f);
-    [SerializeField] private Color scoreColor90to100 = new Color(0.02f, 0.87f, 0.45f);
+    // Updated to transition from Blue to Gold
+    [SerializeField] private Color scoreColor0to59 = new Color(0.1f, 0.3f, 0.8f);   // Deep Blue
+    [SerializeField] private Color scoreColor60to69 = new Color(0.2f, 0.6f, 0.9f);   // Sky Blue
+    [SerializeField] private Color scoreColor70to79 = new Color(0.4f, 0.8f, 0.7f);   // Teal / Aqua
+    [SerializeField] private Color scoreColor80to89 = new Color(0.9f, 0.9f, 0.4f);   // Pale Gold
+    [SerializeField] private Color scoreColor90to100 = new Color(1f, 0.84f, 0f);     // Solid Gold
 
     private Vector3 scoreChangeTextStartPos;
     private Coroutine scoreChangeRoutine;
@@ -55,7 +56,7 @@ public class StatManager : MonoBehaviour
     {
         confidence = Mathf.Clamp(newValue, 0, 100);
         if (confidenceText != null)
-            confidenceText.text = $"{dateScore}";
+            confidenceText.text = $"{confidence}";
     }
 
     public void SetDateScore(int newValue)
@@ -96,7 +97,9 @@ public class StatManager : MonoBehaviour
 
         // Configure text
         scoreChangeText.text = (isIncrease ? "+" : "-") + amount + "  " + reason;
-        scoreChangeText.color = isIncrease ? scoreColor90to100 : scoreColor0to59;
+
+        // Always use the Solid Gold color for readability
+        scoreChangeText.color = scoreColor90to100;
         scoreChangeText.alpha = 1f;
 
         // Floating animation

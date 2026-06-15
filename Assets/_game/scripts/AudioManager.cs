@@ -46,7 +46,15 @@ public class AudioManager : MonoBehaviour
             Destroy(gameObject);
             return; // <-- You must return here so the duplicate stops executing!
         }
-        PlayAmbience("LoopMusic");
+    }
+
+    private void Start()
+    {
+        // When the Main Menu scene loads, tell the persistent audio manager to play the menu track
+        if (Instance != null)
+        {
+            Instance.PlayAmbience("LoopMusic");
+        }
     }
 
     // Added an optional 'pitch' parameter defaulting to 1f
@@ -133,7 +141,7 @@ public class AudioManager : MonoBehaviour
 
     private IEnumerator FadeAmbienceRoutine(AudioClip newAmbience, float duration)
     {
-        float targetVolume = 1f; // Set this to your desired max volume
+        float targetVolume = 0.3f; // Set this to your desired max volume
         float startVolume = AmbienceSource.volume;
 
         // 1. Fade out current

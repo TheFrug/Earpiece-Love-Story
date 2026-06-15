@@ -9,14 +9,30 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject CreditsPanel;
     [SerializeField] private string mainSceneAmbienceKey = "LoopRestaurant";
 
+    private bool isStarting = false;
+
+    private void Start()
+    {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayAmbience("LoopMusic");
+        }
+    }
+
     public void StartGame()
     {
+        if (isStarting) return;
+
+        isStarting = true;
+
         print("Starting");
+
         // Pass the string key instead of the direct AudioClip reference
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.TransitionAmbience(mainSceneAmbienceKey, 1.5f);
         }
+
         if (FadeToBlackEffect.Instance == null)
         {
             Debug.LogError("FadeToBlackEffect.Instance is NULL!");

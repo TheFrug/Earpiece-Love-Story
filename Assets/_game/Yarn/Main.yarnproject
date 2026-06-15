@@ -1,14 +1,27 @@
-﻿{
-  "projectFileVersion": 3,
-  "sourceFiles": [
-    "**/*.yarn"
-  ],
-  "excludeFiles": [
-    "**/*~/*",
-    "./Samples/Yarn Spinner*/*"
-  ],
-  "localisation": {},
-  "baseLanguage": "en",
-  "compilerOptions": {},
-  "definitionsFiles": []
+{
+    "projectFileVersion": 3,
+    "sourceFiles": [
+        "**/*.yarn"
+    ],
+    "excludeFiles": [
+        "**/*~/*",
+        "./Samples/Yarn Spinner*/*"
+    ],
+    "localisation": {},
+    "baseLanguage": "en",
+    "compilerOptions": {
+        "yarnScriptEditor": {
+            "projectGraphPositions": {
+                "Alphavision.yarn": {
+                    "x": 12,
+                    "y": 12
+                },
+                "DateScene.yarn": {
+                    "x": 1953,
+                    "y": -14
+                }
+            }
+        }
+    },
+    "definitionsFiles": []
 }
