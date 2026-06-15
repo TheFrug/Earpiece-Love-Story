@@ -828,6 +828,14 @@ PrefabInstance:
       propertyPath: m_ShowMaskGraphic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 994421945719226562, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 700
+      objectReference: {fileID: 0}
+    - target: {fileID: 994421945719226562, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 280
+      objectReference: {fileID: 0}
     - target: {fileID: 1113088420177982078, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_fontSize
       value: 25
@@ -895,7 +903,11 @@ PrefabInstance:
     - target: {fileID: 1800357842895472766, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: dd190f978c7edc641b2fbaa6c771c0d5, type: 3}
+      objectReference: {fileID: 21300000, guid: 03d6b441cfa2f4b45892df530bd67abd, type: 3}
+    - target: {fileID: 1800357842895472766, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
+      propertyPath: m_Color.a
+      value: 0.9019608
+      objectReference: {fileID: 0}
     - target: {fileID: 2190712432451965945, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -53.2
@@ -1398,11 +1410,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5658884207412449637, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 500
+      value: 730
       objectReference: {fileID: 0}
     - target: {fileID: 5658884207412449637, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 450
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 6036974122321472905, guid: 7bbc33e2e1c661841b716de3dc489104, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3671,7 +3683,7 @@ MonoBehaviour:
   - key: steak
     sprite: {fileID: 21300000, guid: 6e7767e70314301449bf82c5f6f23e1e, type: 3}
   - key: smartGlasses
-    sprite: {fileID: 21300000, guid: 48a70bad3edd1be40b3b90ad2fe9734f, type: 3}
+    sprite: {fileID: 21300000, guid: aa81f09af3ce53c49bba7ba93abe8763, type: 3}
 --- !u!1001 &2355451750495411233
 PrefabInstance:
   m_ObjectHideFlags: 0
